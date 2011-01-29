@@ -1,0 +1,9 @@
+Builder halting problem
+when the makepkgchroot is called we neeed to monitor the output, if the output is stalled for a considerable amount of time, say 10 minutes then the build can be marked in the builder state as stalled, and another builder can pick it up.
+
+Should we use a builder peer review? Or master process?
+
+With a master decision the master needs to get the builder config, and then stalled packeges will take more time to be picked up
+With a peer review the builder takes packages based on the live performance of the builder, which allows for dynamic fluctuations in the builder performance vs the size of the packages being built.
+
+I am still voting peer checks

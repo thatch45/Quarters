@@ -1,0 +1,25 @@
+All major data structures used by the https communication medium need to be documented here for consistancy.
+Shrinking data sructures will usually require api changes, announce changes here before shrinking
+Expanding is ok, just add more to the dicts
+
+Master state structure:
+server - Master
+http location - /master_state.qjz
+{}
+
+Builder assignment structure:
+server - Master
+http location - /build/<builder key>.qjz
+[{'pkgname': <package name>,
+  'srcpkg': <url to scr.pkg on the master>}, ...]
+
+Builder State structure:
+server - Builder
+http location - /builder_state.qjz
+{'key': 'random key generated when the builder starts',
+ 'chroots': int(<number of chroots>),
+ 'building: [<pkgname>, ...]',
+ ready {'package name': {
+            'pkgurl: <url>',
+            'sha256sum': <pkg sum>,
+            'status': 'fail'/'stall'/'ready'}, ...}

@@ -1,1 +1,68 @@
 #!/usr/bin/env python3
+
+import threading
+import time
+from queue import Queue
+
+class JobOverlord:
+    '''
+
+    controls all the poor jobs running on the server
+
+    '''
+
+    def __init__( self, max_jobs ):
+        self.max_jobs = max_jobs
+        self.job_pool = []
+        self.pending_jobs = Queue()
+        for i in range(100):
+            self.pending_jobs.put(JobDescription(str(i), str(i)))
+        self.running_jobs = Queue( max_jobs )
+        self.completed_jobs = Queue()
+
+
+    def whip( self ):
+        for i in range( self.max_jobs ):
+            job = Jobling( self )
+            job.start()
+            self.job_pool.append( job )
+
+        for job in self.job_pool:
+            job.join()
+
+    def add_job( self, job_description ):
+        self.pending_jobs.put( job_description )
+
+class Jobling( threading.Thread ):
+    '''
+
+    does all the hardwork, will eventually die and return 42
+
+    '''
+
+    def __init__( self, job_overlord ):
+        threading.Thread.__init__( self )
+        self.job_overlord = job_overlord
+
+    def run( self ):
+        while 1:
+            current_job = self.job_overlord.pending_jobs.get()
+
+            print( 'thread %s sleeping for 2 seconds' % ( current_job.package_name ) )
+
+            time.sleep( 2 )
+
+class JobDescription:
+    '''
+
+    a structure to store a job description
+
+    '''
+
+    def __init__( self, package_name, package_source ):
+        self.package_name = package_name
+        self.package_source = package_source
+
+if __name__ == '__main__':
+    jo = JobOverlord( 5 )
+    jo.whip()

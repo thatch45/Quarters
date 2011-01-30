@@ -1,0 +1,13 @@
+jobserver maintains pool of workers
+    |
+    +---+VARIABLES
+    |   |
+    |   +----list_of_jobs_todo
+    |   |
+    |   +----list_of_jobs_currently executing
+    |
+    +---+THINGS TO MANAGE
+        |
+        +----constantly keep checking for new jobs to do
+        |
+        +----keep the pool busy (processing new jobs as old jobs finish)

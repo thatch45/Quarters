@@ -4,7 +4,7 @@ import threading
 import time
 from queue import Queue
 
-class JobOverlord:
+class JobOverlord( threading.Thread ):
     '''
 
     controls all the poor jobs running on the server
@@ -12,6 +12,7 @@ class JobOverlord:
     '''
 
     def __init__( self, max_jobs ):
+        threading.Thread.__init__( self )
         self.max_jobs = max_jobs
         self.job_pool = []
         self.pending_jobs = Queue()
@@ -21,7 +22,7 @@ class JobOverlord:
         self.completed_jobs = Queue()
 
 
-    def whip( self ):
+    def run( self ):
         for i in range( self.max_jobs ):
             job = Jobling( self )
             job.start()
@@ -65,4 +66,6 @@ class JobDescription:
 
 if __name__ == '__main__':
     jo = JobOverlord( 5 )
-    jo.whip()
+    jo.start()
+    for i in range(100, 200):
+        jo.add_job(JobDescription(str(i), str(i)))

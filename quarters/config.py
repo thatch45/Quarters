@@ -20,14 +20,16 @@ def read( filename ):
         with open( filename ) as stream:
             loadedconfig = yaml.load( stream )
         if loadedconfig is None:
-            # empty config
+            print( 'warning: empty config, using default config' )
             return defaultconfig
     except ( IOError, yaml.YAMLError ) as e:
-        # file not found, yaml syntax error
+        print( 'warning: %s, using default config' % e )
         return defaultconfig
 
     # check if there is something useful in the config
     if 'master' not in loadedconfig and 'builders' not in loadedconfig:
+        print( 'warning: master or builders not defined in config, using default config' )
         return defaultconfig
     else:
+        print( 'config loaded successfully')
         return loadedconfig

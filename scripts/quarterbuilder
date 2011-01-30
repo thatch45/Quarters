@@ -7,7 +7,7 @@ from queue import Queue
 class JobOverlord( threading.Thread ):
     '''
 
-    controls all the poor jobs running on the server
+    controls all the poor joblings running on the server
 
     '''
 
@@ -21,7 +21,7 @@ class JobOverlord( threading.Thread ):
         self.running_jobs = Queue( max_jobs )
         self.completed_jobs = Queue()
 
-
+    # should we have max_job threads that pull? or should we create new threads for each new job? I chose the former for now
     def run( self ):
         for i in range( self.max_jobs ):
             job = Jobling( self )
@@ -55,9 +55,9 @@ class Jobling( threading.Thread ):
             time.sleep( 2 )
 
             # FIXME: can't use the Queue data structure for running_jobs
-            # check if dict is threadsafe
+            # check if dict is threadsafe, actually we can, need to give each job a unique job id, maybe serverid-date ?
             self.job_overlord.running_jobs.get()
-            # dunno how much tasks we should keep track of
+            # dunno how many tasks we should keep track of
             # depending on answer, may need to change to different data structure
             self.job_overlord.completed_jobs.put(current_job)
 

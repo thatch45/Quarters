@@ -32,8 +32,8 @@ class State:
 
     def update( self ):
         # FIXME: urlopen doesn't do https verification
-        json_state = urllib.request.urlopen( url ).read()
+        json_state = urllib.request.urlopen( url )
 
-        state = json.loads( json_state )
+        state = json.load( json_state )
 
         set_state( self, json_state )

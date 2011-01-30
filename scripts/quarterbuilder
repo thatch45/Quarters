@@ -48,10 +48,18 @@ class Jobling( threading.Thread ):
     def run( self ):
         while 1:
             current_job = self.job_overlord.pending_jobs.get()
+            self.job_overlord.running_jobs.put(current_job)
 
             print( 'thread %s sleeping for 2 seconds' % ( current_job.package_name ) )
 
             time.sleep( 2 )
+
+            # FIXME: can't use the Queue data structure for running_jobs
+            # check if dict is threadsafe
+            self.job_overlord.running_jobs.get()
+            # dunno how much tasks we should keep track of
+            # depending on answer, may need to change to different data structure
+            self.job_overlord.completed_jobs.put(current_job)
 
 class JobDescription:
     '''

@@ -2,9 +2,9 @@ jobserver maintains pool of workers
     |
     +---+VARIABLES
     |   |
-    |   +----list_of_jobs_todo
+    |   +----pool of pending jobs
     |   |
-    |   +----list_of_jobs_currently executing
+    |   +----state of everything
     |
     +---+THINGS TO MANAGE
         |

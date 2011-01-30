@@ -11,7 +11,8 @@ Builder assignment structure:
 server - Master
 http location - /build/<builder key>.qjz
 [{'pkgname': <package name>,
-  'srcpkg': <url to scr.pkg on the master>}, ...]
+  'srcpkg': <url to scr.pkg on the master>,
+  'ujid': <unique job id>}, ...]
 
 Builder State structure:
 server - Builder

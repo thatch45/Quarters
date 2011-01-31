@@ -6,6 +6,8 @@ from quarters.state import State
 
 import subprocess
 
+import urllib.request
+
 class JobOverlord( threading.Thread ):
     '''
 
@@ -16,16 +18,16 @@ class JobOverlord( threading.Thread ):
     def __init__( self, max_jobs ):
         threading.Thread.__init__( self )
         self.max_jobs = max_jobs
-        self.job_pool = []
+        self.jobling_pool = []
         self.pending_jobs = Queue()
 
     def run( self ):
         for i in range( self.max_jobs ):
             job = Jobling( self )
             job.start()
-            self.job_pool.append( job )
+            self.jobling_pool.append( job )
 
-        for job in self.job_pool:
+        for job in self.jobling_pool:
             job.join()
 
     def add_job( self, job_description ):
@@ -70,7 +72,6 @@ class JobDescription:
 
         time.sleep( 2 )
 
-        ( return_code, output ) = subprocess.getstatusoutput( 'mkdir -p /var/tmp/quarters/' + self.package_name )
-        ( return_code, output ) = subprocess.getstatusoutput( 'cd /var/tmp/quarters/' + self.package_name )
-        ( return_code, output ) = subprocess.getstatusoutput( 'ls /bin/ls' )
-
+        ( return_code, output ) = subprocess.getstatusoutput( 'mkdir -p /var/tmp/quarters/' + self.ujid )
+        urllib.request.urlretrieve( self.package_source, '/var/tmp/quarters/' + self.ujid + '/' + self.package_name + '.tar.gz' )
+        ( return_code, output ) = subprocess.getstatusoutput( 'tar -xfz ' + self.package_name + '.tar.gz' )

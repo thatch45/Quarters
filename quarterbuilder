@@ -1,0 +1,9 @@
+#!/usr/bin/env python3
+
+from quarters.builder.jobmanager import JobOverlord, JobDescription
+
+if __name__ == '__main__':
+    jo = JobOverlord( 5 )
+    jo.start()
+    for i in range( 100 ):
+        jo.add_job( JobDescription( str( i ), str( i ), str( i ) ) )

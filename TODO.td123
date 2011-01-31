@@ -1,0 +1,2 @@
+integrate state with job manager
+move job manager to seperate module under quarters/builder

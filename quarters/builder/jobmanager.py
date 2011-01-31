@@ -91,5 +91,5 @@ class JobDescription:
         urllib.request.urlretrieve( self.package_source, pkgsrc_path )
 
         #( return_code, output ) = subprocess.getstatusoutput( 'tar -xfz ' + self.package_name + '.tar.gz' )
-        temp_tar = tarfile.open( pkgsrc_path )
-        temp_tar.extractall( pkgsrc_path )
+        temp_tar = tarfile.open( pkgsrc_path, 'r:gz' )
+        temp_tar.extractall( pkgsrc_path, temp_tar.getmembers() )

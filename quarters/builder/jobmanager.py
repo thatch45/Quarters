@@ -8,6 +8,10 @@ import subprocess
 
 import urllib.request
 
+import os
+
+import tarfile
+
 class JobOverlord( threading.Thread ):
     '''
 
@@ -72,6 +76,20 @@ class JobDescription:
 
         time.sleep( 2 )
 
-        ( return_code, output ) = subprocess.getstatusoutput( 'mkdir -p /var/tmp/quarters/' + self.ujid )
-        urllib.request.urlretrieve( self.package_source, '/var/tmp/quarters/' + self.ujid + '/' + self.package_name + '.tar.gz' )
-        ( return_code, output ) = subprocess.getstatusoutput( 'tar -xfz ' + self.package_name + '.tar.gz' )
+        job_path = '/var/tmp/quarters/' + self.ujid
+        pkgsrc_path = job_path + '/' + self.package_name + '.tar.gz'
+
+        #( return_code, output ) = subprocess.getstatusoutput( 'mkdir -p ' + job_path )
+        try:
+            os.makedirs( job_path )
+        except os.error as e:
+            print( 'warning: leaf directory already exists at ' + job_path )
+
+        # need to make sure that urlretrieve overwrites if existing file with same name is found
+        # "If the URL points to a local file, or a valid cached copy of the object exists, the object is not copied."
+        # http://docs.python.org/py3k/library/urllib.request.html#urllib.request.urlretrieve
+        urllib.request.urlretrieve( self.package_source, pkgsrc_path )
+
+        #( return_code, output ) = subprocess.getstatusoutput( 'tar -xfz ' + self.package_name + '.tar.gz' )
+        temp_tar = tarfile.open( pkgsrc_path )
+        temp_tar.extractall( pkgsrc_path )

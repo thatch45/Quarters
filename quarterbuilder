@@ -2,11 +2,16 @@
 
 from quarters.builder.jobmanager import JobOverlord, JobDescription
 
+import quarters.config
+
 if __name__ == '__main__':
+    config = quarters.config.read('conf/builder.conf')
+
     jo = JobOverlord( 5 )
     jo.start()
 
     # add jobs
     for i in range( 100 ):
         # job description: ujid, pkgname, pkgsrc
-        jo.add_job( JobDescription( str( i ), str( i ), 'https://aur.archlinux.org/packages/rr62x/rr62x.tar.gz' ) )
+        jd = JobDescription( str( i ), str( i ), 'https://aur.archlinux.org/packages/rr62x/rr62x.tar.gz' )
+        jo.add_job( jd )

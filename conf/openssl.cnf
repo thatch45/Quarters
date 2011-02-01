@@ -1,0 +1,12 @@
+[ req ]
+default_bits           = 1024
+distinguished_name     = req_distinguished_name
+prompt                 = no
+[ req_distinguished_name ]
+C                      = AL
+ST                     = ArchLand
+L                      = ArchVille
+O                      = ArchLinux
+OU                     = Archers
+CN                     = Archer
+emailAddress           = archer@archlinux.org

@@ -5,6 +5,9 @@ these objects are all it takes to fire up the entire builders and masters.
 import optparse
 import sys
 import os
+# Import quarters libs
+import quarters.https
+import quarters.config
 
 def daemonize():
     '''

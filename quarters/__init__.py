@@ -60,6 +60,7 @@ class Master:
                 default='/etc/quarters/master.conf',
                 help='The location of the master configuration file;'\
                     + ' default=/etc/quarters/master.conf')
+
         parser.add_option('--foreground',
                 dest='foreground',
                 default=False,
@@ -79,4 +80,57 @@ class Master:
         '''
         This method executes the quarters master server.
         '''
-        pass
+        if not self.opts['disable_https']:
+            quarters.https.partner_https(
+                    self.opts['listen_addr'],
+                    self.opts['port'],
+                    self.opts['https_root'],
+                    self.opts['pemfile'])
+
+
+class Builder:
+    '''
+    The quarters builder
+    '''
+    def __init__(self):
+        cli_opts = self.__cli_parser()
+        self.opts = quarters.config.read(cli_opts['config'])
+        if not cli_opts['foreground']:
+            daemonize()
+
+    def __cli_parser(self):
+        '''
+        Parses the command line arguments.
+        '''
+        parser = optparse.OptionParser()
+        parser.add_option('-c',
+                '--config', 
+                dest='config',
+                default='/etc/quarters/builder.conf',
+                help='The location of the builder configuration file;'\
+                    + ' default=/etc/quarters/builder.conf')
+        parser.add_option('--foreground',
+                dest='foreground',
+                default=False,
+                action='store_true',
+                help='Set this flag to run the quarters builder in the'\
+                    + ' foreground, this is helpful when debugging problems'\
+                    + ' with the server')
+
+        options, args = parser.parse_args()
+
+        opts = {'config': options.config,
+                'foreground': option.foreground}
+
+        return opts
+
+    def start_quarters_builder(self):
+        '''
+        This method executes the quarters master server.
+        '''
+        if not self.opts['disable_https']:
+            quarters.https.partner_https(
+                    self.opts['listen_addr'],
+                    self.opts['port'],
+                    self.opts['https_root'],
+                    self.opts['pemfile'])

@@ -5,7 +5,7 @@ import quarters.utils
 
 def main():
     '''
-    The main funtion yo!
+    The main funtion for the master server
     '''
     master = quarters.Master()
     quarters.utils.check_root()

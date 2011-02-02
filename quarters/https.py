@@ -5,6 +5,7 @@ calls to retrive the json from the master and builders.
 '''
 # Import python modules
 import os
+import sys
 import socket
 import socketserver
 import http.server
@@ -12,36 +13,25 @@ import urllib.request
 import zlib
 import json
 import random
+import ssl
 import multiprocessing
 import subprocess
-# Import third party modules
-import OpenSSL
-# Import quarters modules
-#import quarters.config
 
 class SecureHTTP(socketserver.ThreadingMixIn, http.server.HTTPServer):
     def __init__(self, pem, server_addr, HandlerClass):
         socketserver.BaseServer.__init__(self, server_addr, HandlerClass)
-        ctx = OpenSSL.SSL.Context(OpenSSL.SSL.SSLv23_METHOD)
         if not os.path.isfile(pem):
             ssl_cmd = 'openssl req -new -x509 -keyout ' + pem + ' -out '\
-                    + pem + ' -days 365 -nodes'
+                    + pem + ' -days 365 -nodes -config /etc/quarters/openssl.cnf'
             print(ssl_cmd)
             subprocess.call(ssl_cmd, shell=True)
-        ctx.use_privatekey_file(pem)
-        ctx.use_certificate_file(pem)
-        self.socket = OpenSSL.SSL.COnnection(ctx,
-            socket.socket(self.address_family, self.socket_type))
+        self.socket = ssl.wrap_socket(
+                socket.socket(socket.AF_INET, socket.SOCK_STREAM),
+                keyfile=pem,
+                certfile=pem)
 
         self.server_bind()
         self.server_activate()
-
-
-class SecureHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
-    def setup(self):
-        self.connection = self.request
-        self.rfile = socket._fileobject(self.request, "rb", self.rbufsize)
-        self.wfile = socket._fileobject(self.request, "wb", self.wbufsize)
 
 
 def master_url():
@@ -73,12 +63,23 @@ def builder_states(builders):
         except:
             pass
 
-def serve_http():
-    server_address = ('', 443)
-    httpd = SecureHTTP('server.pem', server_address, SecureHTTPRequestHandler)
+def serve_https(addr, port, basedir='.', pem='server.pem'):
+    '''
+    Starts up an https server in the designated directory
+    '''
+    server_address = (addr, port)
+    httpd = SecureHTTP(pem,
+            server_address,
+            http.server.SimpleHTTPRequestHandler)
     sa = httpd.socket.getsockname()
     httpd.serve_forever()
 
+def partner_https(addr, port, basedir, pem):
+    '''
+    Starts up an https server in a python multiprocess so that it run
+    allongside the other opperations
+    '''
+    multiprocessing.Process(target=serve_https(addr, port, basedir, pem)).start()
 
 if __name__ == '__main__':
-    serve_http()
+    serve_https(sys.argv[1], sys.argv[2])

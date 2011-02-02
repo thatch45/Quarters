@@ -1,1 +1,15 @@
 #!/usr/bin/env python3
+
+import quarters
+import quarters.utils
+
+def main():
+    '''
+    The main funtion for the builder
+    '''
+    master = quarters.Builder()
+    quarters.utils.check_root()
+    master.start_builder_server()
+
+if __name__ == '__main__':
+    main()

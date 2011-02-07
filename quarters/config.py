@@ -1,35 +1,44 @@
 import yaml
+import os
+import sys
 
-def read( filename ):
+def read_master(filename):
     '''
-
     robust config reader
-
     '''
+    if not os.path.isfile(filename):
+        err = 'The configuration file ' + filename + ' does not exist.'
+        sys.stderr.write(err + '\n')
+        sys.exit(2)
+    master = {
+              'builders': [],
+              'svn': [],
+              'listen': '0.0.0.0',
+              'port': 6777,
+              'https_root': '/var/cache/quarters/https',
+              'pemfile': '/etc/quarters/cert/quarters.pem',
+             }
+    
 
-    defaultconfig = {
-                      'master'   : '0.0.0.0',
-                      'builders' : [
-                                     '0.0.0.1',
-                                     '0.0.0.2'
-                                   ]
-                    }
+    return master.update(yaml.load(open(filename, 'r')))
 
-    # file handling
-    try:
-        with open( filename ) as stream:
-            loadedconfig = yaml.load( stream )
-        if loadedconfig is None:
-            print( 'warning: empty config, using default config' )
-            return defaultconfig
-    except ( IOError, yaml.YAMLError ) as e:
-        print( 'warning: %s, using default config' % e )
-        return defaultconfig
+def read_builder(filename):
+    '''
+    robust config reader
+    '''
+    if not os.path.isfile(filename):
+        err = 'The configuration file ' + filename + ' does not exist.'
+        sys.stderr.write(err + '\n')
+        sys.exit(2)
+    builder = {
+               'builders': [],
+               'svn': [],
+               'listen': '0.0.0.0',
+               'port': 6777,
+               'https_root': '/var/cache/quarters/https',
+               'pemfile': '/etc/quarters/cert/quarters.pem',
+              }
+    
 
-    # check if there is something useful in the config
-    if 'master' not in loadedconfig and 'builders' not in loadedconfig:
-        print( 'warning: master or builders not defined in config, using default config' )
-        return defaultconfig
-    else:
-        print( 'config loaded successfully')
-        return loadedconfig
+    return builder.update(yaml.load(open(filename, 'r')))
+

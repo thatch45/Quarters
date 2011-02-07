@@ -8,7 +8,8 @@ def main():
     The main funtion for the master server
     '''
     master = quarters.Master()
-    quarters.utils.check_root()
+    # Lets try to make this be able to run as a user
+    #quarters.utils.check_root()
     master.start_master_server()
 
 if __name__ == '__main__':

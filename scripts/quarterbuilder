@@ -8,7 +8,8 @@ def main():
     The main funtion for the builder
     '''
     master = quarters.Builder()
-    quarters.utils.check_root()
+    # Try to make this not run as root
+    #quarters.utils.check_root()
     master.start_builder_server()
 
 if __name__ == '__main__':

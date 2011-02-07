@@ -7,7 +7,8 @@ arch=('any')
 url="https://github.com/thatch45/Quarters"
 license=('GPL3')
 groups=()
-depends=('python')
+depends=('python' 
+         'python3-yaml')
 makedepends=('git')
 
 _gitroot="git://github.com/thatch45/Quarters.git"

@@ -20,8 +20,10 @@ def read_master(filename):
               'disable_https': '',
              }
     
-
-    return master.update(yaml.load(open(filename, 'r')))
+    conf = yaml.load(open(filename, 'r'))
+    if conf:
+        master.update(conf)
+    return master
 
 def read_builder(filename):
     '''
@@ -41,6 +43,8 @@ def read_builder(filename):
                'disable_https': '',
               }
     
-
-    return builder.update(yaml.load(open(filename, 'r')))
+    conf = yaml.load(open(filename, 'r'))
+    if conf:
+        master.update(conf)
+    return master
 

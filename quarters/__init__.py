@@ -85,7 +85,7 @@ class Master:
         '''
         if not self.opts['disable_https']:
             quarters.https.partner_https(
-                    self.opts['listen_addr'],
+                    self.opts['listen'],
                     self.opts['port'],
                     self.opts['https_root'],
                     self.opts['pemfile'])
@@ -133,7 +133,7 @@ class Builder:
         '''
         if not self.opts['disable_https']:
             quarters.https.partner_https(
-                    self.opts['listen_addr'],
+                    self.opts['listen'],
                     self.opts['port'],
                     self.opts['https_root'],
                     self.opts['pemfile'])

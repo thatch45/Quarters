@@ -16,7 +16,7 @@ def read_master(filename):
               'listen': '0.0.0.0',
               'port': 6777,
               'https_root': '/var/cache/quarters/https',
-              'pemfile': '/etc/quarters/cert/quarters.pem',
+              'pemfile': '/etc/quarters/quarters.pem',
               'disable_https': '',
              }
     
@@ -39,7 +39,7 @@ def read_builder(filename):
                'listen': '0.0.0.0',
                'port': 6777,
                'https_root': '/var/cache/quarters/https',
-               'pemfile': '/etc/quarters/cert/quarters.pem',
+               'pemfile': '/etc/quarters/quarters.pem',
                'disable_https': '',
               }
     

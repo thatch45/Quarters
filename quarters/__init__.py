@@ -48,7 +48,7 @@ class Master:
     '''
     def __init__(self):
         cli_opts = self.__cli_parser()
-        self.opts = quarters.config.read(cli_opts['config'])
+        self.opts = quarters.config.read_master(cli_opts['config'])
         if not cli_opts['foreground']:
             daemonize()
 
@@ -97,7 +97,7 @@ class Builder:
     '''
     def __init__(self):
         cli_opts = self.__cli_parser()
-        self.opts = quarters.config.read(cli_opts['config'])
+        self.opts = quarters.config.read_builder(cli_opts['config'])
         if not cli_opts['foreground']:
             daemonize()
 

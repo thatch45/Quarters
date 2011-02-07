@@ -37,7 +37,7 @@ def daemonize():
         print("fork #2 failed: %d (%s)" % (e.errno, e.strerror), file=sys.stderr)
         sys.exit(1) 
 
-    dev_null = file('/dev/null','rw') 
+    dev_null = open('/dev/null','w') 
     os.dup2(dev_null.fileno(), sys.stdin.fileno()) 
     os.dup2(dev_null.fileno(), sys.stdout.fileno()) 
     os.dup2(dev_null.fileno(), sys.stderr.fileno()) 

@@ -10,7 +10,7 @@ def main():
     master = quarters.Master()
     # Lets try to make this be able to run as a user
     #quarters.utils.check_root()
-    master.start_master_server()
+    master.start_quarters_master()
 
 if __name__ == '__main__':
     main()

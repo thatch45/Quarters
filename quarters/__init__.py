@@ -75,7 +75,7 @@ class Master:
         options, args = parser.parse_args()
 
         opts = {'config': options.config,
-                'foreground': option.foreground}
+                'foreground': options.foreground}
 
         return opts
 

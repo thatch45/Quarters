@@ -17,6 +17,7 @@ def read_master(filename):
               'port': 6777,
               'https_root': '/var/cache/quarters/https',
               'pemfile': '/etc/quarters/cert/quarters.pem',
+              'disable_https': '',
              }
     
 
@@ -31,12 +32,13 @@ def read_builder(filename):
         sys.stderr.write(err + '\n')
         sys.exit(2)
     builder = {
-               'builders': [],
-               'svn': [],
+               'master': '',
+               'chroots': 1,
                'listen': '0.0.0.0',
                'port': 6777,
                'https_root': '/var/cache/quarters/https',
                'pemfile': '/etc/quarters/cert/quarters.pem',
+               'disable_https': '',
               }
     
 

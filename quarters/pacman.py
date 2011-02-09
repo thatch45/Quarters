@@ -10,7 +10,7 @@ def find_deps(pkgbuild):
     '''
     deps = []
     if not os.path.exists(pkgbuild):
-        return ret
+        return deps
     for line in open(pkgbuild, 'r').readlines():
         line = line.strip()
         if line.startswith('#'):
@@ -26,14 +26,14 @@ def find_deps(pkgbuild):
                 dep = dep.strip('"')
                 dep = dep.strip("'")
                 deps.append(dep)
-    return ret
+    return deps
 
 def sync_pacman():
     '''
     Just run pacman -Sy
     '''
     cmd = 'pacman -Sy'
-    subprocess.call(cmd, shell=True)
+    subprocess.getoutput(cmd, shell=True)
 
 def check_packages(names, repos):
     '''
@@ -43,11 +43,8 @@ def check_packages(names, repos):
                 repos - []
     returns - names - set()
     '''
-    # Figgin pyalpmm looks to be broken! I need to shell out :(
     cmd = 'pacman -Sl ' + ' '.join(repos)
-    out = subprocess.Popen(cmd,
-        shell=True, 
-        stdout=subprocess.PIPE).communicate()[0]
+    out = subprocess.getoutput(cmd)
     if out.startswith('error:'):
         return names
     pkgs = set()

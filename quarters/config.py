@@ -16,6 +16,8 @@ def read_master(filename):
               'listen': '0.0.0.0',
               'port': 6777,
               'https_root': '/var/cache/quarters/https',
+              'svn_root': '/var/cache/quarters/svn',
+              'git_root': '/var/cache/quarters/git',
               'pemfile': '/etc/quarters/quarters.pem',
               'disable_https': '',
              }

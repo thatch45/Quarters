@@ -28,45 +28,62 @@ def find_deps(pkgbuild):
                 deps.append(dep)
     return deps
 
-def sync_pacman():
+class Pacman:
     '''
-    Just run pacman -Sy
+    Pacman calls need to occur to track the state data of the active pacman 
+    environments, this class is used to track these interactions and is used
+    to ensure that they occur in an up to date issolated environment.
     '''
-    cmd = 'pacman -Sy'
-    subprocess.getoutput(cmd, shell=True)
+    def __init__(self, opts):
+        '''
+        Creates a pacman object
+        '''
+        self.opts = opts
+        self.last_sync = 0
+        self.__setup_env()
 
-def check_packages(names, repos):
-    '''
-    Check to see if the packages are available in a repo. Returns the packages
-    that are not available
-    Arguments - names - set()
-                repos - []
-    returns - names - set()
-    '''
-    cmd = 'pacman -Sl ' + ' '.join(repos)
-    out = subprocess.getoutput(cmd)
-    if out.startswith('error:'):
-        return names
-    pkgs = set()
-    for line in out.split('\n'):
-        pkgs.add(line.split()[1])
-    return names.difference(pkgs)
+    def __setup_env(self):
+        '''
+        Prepare the 2 arch's pacman environments for executing pacman queries.
+        '''
+        pass
 
-def get_pacman_pkgs():
-    '''
-    Returns a dict of {'pkg_name': 'version'} of all available packages from
-    pacman.
-    '''
-    cmd = 'pacman -Sl core extra community multilib'
-    out = subprocess.Popen(cmd,
-        shell=True, 
-        stdout=subprocess.PIPE).communicate()[0]
-    if out.startswith('error:'):
-        return names
-    pkgs = {}
-    for line in out.split('\n'):
-        comps = line.split
-        pkgs[comps[1]] = comps[2]
-    return pkgs
+    def sync_pacman(self):
+        '''
+        Just run pacman -Sy
+        '''
+        cmd = 'pacman -Sy'
+        subprocess.getoutput(cmd, shell=True)
 
+    def check_packages(self, names, repos):
+        '''
+        Check to see if the packages are available in a repo. Returns the packages
+        that are not available
+        Arguments - names - set()
+                    repos - []
+        returns - names - set()
+        '''
+        cmd = 'pacman -Sl ' + ' '.join(repos)
+        out = subprocess.getoutput(cmd)
+        if out.startswith('error:'):
+            return names
+        pkgs = set()
+        for line in out.split('\n'):
+            pkgs.add(line.split()[1])
+        return names.difference(pkgs)
+
+    def get_pacman_pkgs(self, repos=['core', 'community', 'extra', 'multilib']):
+        '''
+        Returns a dict of {'pkg_name': 'version'} of all available packages from
+        pacman.
+        '''
+        cmd = 'pacman -Sl ' + repos
+        out = subprocess.getoutput(cmd)
+        if out.startswith('error:'):
+            return names
+        pkgs = {}
+        for line in out.split('\n'):
+            comps = line.split
+            pkgs[comps[1]] = comps[2]
+        return pkgs
 

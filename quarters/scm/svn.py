@@ -80,7 +80,15 @@ class SVN:
     def fresh_pkgs(self):
         '''
         Return a dict of all packages that need to be built!
-        {'<package name>': <pkgver>}
+        {'<package name>': {'version': '<pkgver>',
+                            'deps': '<unavailable deps>'}
         '''
+        # Things to check:
+        # PKGBUILD version vs the bin version
+        # If there is a corresponding bin_pkg
+        # Get a list of package deps, and list only the ones that cannot be met
+        repo_info = self._update_repos()
+        bin_pkgs = self.pacman.repo_pkgs()
         pkgs = {}
+
 

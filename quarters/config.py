@@ -18,6 +18,7 @@ def read_master(filename):
               'https_root': '/var/cache/quarters/https',
               'svn_root': '/var/cache/quarters/svn',
               'git_root': '/var/cache/quarters/git',
+              'pacman_root': '/var/cache/quarters/pacman_root',
               'pemfile': '/etc/quarters/quarters.pem',
               'disable_https': '',
              }

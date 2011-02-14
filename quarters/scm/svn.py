@@ -11,15 +11,15 @@ import os
 import subprocess
 import hashlib
 # Import quarters libs
-import quarters.pacman
 import quarters.pkgbuild
 
 class SVN:
     '''
     Manage svn repos
     '''
-    def __init__(self, opts):
+    def __init__(self, opts, pacman):
         self.opts = opts
+        self.pacman = pacman
         self.roots = self.__prepare_roots()
 
     def __prepare_roots(self):
@@ -34,29 +34,53 @@ class SVN:
             roots[os.path.join(self.opts['svn_root'], base)] = root
         return roots
 
-    def _setup_repos(self):
+    def _find_pkgbuilds(self, base, lines):
         '''
-        Prepare the initial repositories
+        Takes a list of stings as output from the svn commands and finds which
+        lines are pkgbuilds.
         '''
+        ret = []
+        for line in lines:
+            if line.startswith('Checked'):
+                continue
+            fn_ = line.split()[1]
+            if fn_.endswith('PKGBUILD'):
+                ret.append(os.path.join(base, fn_))
+        return ret
+
+    def _update_repos(self):
+        '''
+        Prepare the reposiroties, return dict with repo information:
+        {'<repo dir>': {'last_rev': '<last revision number>',
+                         'files': '<list of files changed since last revision>'}
+        '''
+        repo_info = {}
         for base in self.roots:
+            repo_info[base] = {}
             if not os.path.isdir(base):
                 # checkout the repo
                 co_cmd = 'svn co ' + self.roots[base] + ' ' + base
-                subprocess.getoutput(co_cmd)
+                lines = bytes.decode(subprocess.getoutput(co_cmd)).splitlines()
+                repo_info[base]['last_rev'] = None
+                repo_info[base]['files'] = self._find_pkgbuilds(base, lines)
             else:
                 # Check the release numbers and run an update
                 l_cmd = 'svn info ' + base + " | grep Revision: | awk '{print $2}'"
                 l_rev = int(subprocess.getoutput(i_cmd).strip())
+                repo_info['last_rev'] = str(l_rev)
                 r_cmd = 'svn info ' + self.roots[base] + " | grep Revision: | awk '{print $2}'"
                 r_rev = int(subprocess.getoutput(r_cmd).strip())
                 if r_rev > l_rev:
                     # The local repo is out of date, update!
                     u_cmd = 'svn up ' + base
-                    subprocess.getoutput(u_cmd)
+                    lines = bytes.decode(subprocess.getoutput(u_cmd)).splitlines()
+                    repo_info[base]['files'] = self._find_pkgbuilds(base, lines)
+        return repo_info
 
-    def _get_pkgs(self):
+    def fresh_pkgs(self):
         '''
-        Return a dict of all packages that are in svn, but not up to date
+        Return a dict of all packages that need to be built!
+        {'<package name>': <pkgver>}
         '''
-        pass
+        pkgs = {}
 

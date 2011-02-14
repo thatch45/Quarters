@@ -96,6 +96,7 @@ class Pacman:
         {'<package name>': {'version': '<version>',
                             'repo': '<repo>'}
         '''
+        self.sync_pacman()
         pkgs = {}
         for root in self.roots:
             pkgs[root] = {}

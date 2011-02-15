@@ -1,0 +1,2 @@
+#!/bin/bash
+# The other pkgbuild parsers out there don't seem the handle split packages, this one will need to

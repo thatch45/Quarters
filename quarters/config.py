@@ -48,6 +48,6 @@ def read_builder(filename):
     
     conf = yaml.load(open(filename, 'r'))
     if conf:
-        master.update(conf)
-    return master
+        builder.update(conf)
+    return builder
 

@@ -5,7 +5,7 @@ from quarters.builder.jobmanager import JobOverlord, JobDescription
 import quarters.config
 
 if __name__ == '__main__':
-    config = quarters.config.read('conf/builder.conf')
+    config = quarters.config.read_builder('conf/builder.conf')
 
     jo = JobOverlord( 5 )
     jo.start()

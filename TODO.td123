@@ -1,5 +1,5 @@
 stuff for now
-create config and read it
+find out if current devtools set chroot barrier. if not patch them so that we don't have to worry about it in quarters
 
 stuff for later
 create state fetcher (hermes)

@@ -1,14 +1,11 @@
 import threading
 import time
 from queue import Queue
-
 from quarters.state import State
-
 import urllib.request
-
 import os
-
 import tarfile
+from multiprocessing import Process, Queue
 
 class JobOverlord( threading.Thread ):
     '''
@@ -20,41 +17,31 @@ class JobOverlord( threading.Thread ):
     def __init__( self, max_jobs ):
         threading.Thread.__init__( self )
         self.max_jobs = max_jobs
-        self.jobling_pool = []
+        self.plist = []
         self.pending_jobs = Queue()
 
     def run( self ):
         for i in range( self.max_jobs ):
-            job = Jobling( self )
-            job.start()
-            self.jobling_pool.append( job )
+            p = Process( target=worker, args=( self.pending_jobs, i ) )
+            p.start()
+            self.plist.append( p )
 
-        for job in self.jobling_pool:
-            job.join()
+        for p in self.plist:
+            p.join()
 
     def add_job( self, job_description ):
         self.pending_jobs.put( job_description )
 
-class Jobling( threading.Thread ):
-    '''
+def worker( job_queue, worker_id ):
+    ''' worker where the grunt work takes place '''
+    while 1:
+        current_job = job_queue.get()
 
-    does all the hardwork, will eventually die and return 42
+        # update state here (running)
 
-    '''
+        current_job.job()
 
-    def __init__( self, job_overlord ):
-        threading.Thread.__init__( self )
-        self.job_overlord = job_overlord
-
-    def run( self ):
-        while 1:
-            current_job = self.job_overlord.pending_jobs.get()
-
-            # update state here (running)
-
-            current_job.job()
-
-            # update state here (done)
+        # update state here (done)
 
 class JobDescription:
     '''

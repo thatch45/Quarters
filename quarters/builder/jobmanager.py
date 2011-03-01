@@ -4,8 +4,6 @@ from queue import Queue
 
 from quarters.state import State
 
-import subprocess
-
 import urllib.request
 
 import os
@@ -79,7 +77,6 @@ class JobDescription:
         job_path = '/var/tmp/quarters/' + self.ujid
         pkgsrc_path = job_path + '/' + self.package_name + '.tar.gz'
 
-        #( return_code, output ) = subprocess.getstatusoutput( 'mkdir -p ' + job_path )
         try:
             os.makedirs( job_path )
         except os.error as e:
@@ -90,6 +87,5 @@ class JobDescription:
         # http://docs.python.org/py3k/library/urllib.request.html#urllib.request.urlretrieve
         urllib.request.urlretrieve( self.package_source, pkgsrc_path )
 
-        #( return_code, output ) = subprocess.getstatusoutput( 'tar -xfz ' + self.package_name + '.tar.gz' )
         temp_tar = tarfile.open( pkgsrc_path )
         temp_tar.extractall( job_path )

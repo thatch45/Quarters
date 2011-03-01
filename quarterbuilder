@@ -10,7 +10,8 @@ if __name__ == '__main__':
     config = quarters.config.read_builder('conf/builder.conf')
 
     # set maximum number of simultaneous chroots
-    jo = JobOverlord( config['chroots'] )
+    #jo = JobOverlord( config['chroots'] )
+    jo = JobOverlord( 2 )
     jo.start()
 
     pkgname = 'libuser'

@@ -52,8 +52,8 @@ class JobDescription:
 
         time.sleep( 2 )
 
-        job_path = '/var/tmp/quarters/' + self.ujid
-        pkgsrc_path = job_path + '/' + self.package_name + '.tar.gz'
+        job_path = os.path.join( '/var/tmp/quarters/', self.ujid )
+        pkgsrc_path = os.path.join( job_path, self.package_name + '.tar.gz' )
 
         try:
             os.makedirs( job_path )

@@ -1,5 +1,6 @@
 stuff for now
-find out if current devtools set chroot barrier. if not patch them so that we don't have to worry about it in quarters
+set up server with packages to build, and set up worker to read state, and add to job queue
 
 stuff for later
 create state fetcher (hermes)
+find out if current devtools set chroot barrier. if not patch them so that we don't have to worry about it in quarters

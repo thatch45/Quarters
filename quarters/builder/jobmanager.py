@@ -1,5 +1,4 @@
 import threading
-import time
 from quarters.state import State
 import urllib.request
 import os
@@ -51,8 +50,6 @@ class JobDescription:
 
     def job( self, chroot_path ):
         print( 'thread %s sleeping for 2 seconds' % ( self.package_name ) )
-
-        time.sleep( 2 )
 
         job_path = os.path.join( '/var/tmp/quarters/', self.ujid )
         pkgsrc_path = os.path.join( job_path, self.package_name + '.tar.gz' )

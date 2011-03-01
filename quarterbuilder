@@ -10,8 +10,10 @@ if __name__ == '__main__':
     jo = JobOverlord( 5 )
     jo.start()
 
+    pkgname = 'libuser'
+
     # add jobs
-    for i in range( 100 ):
+    for i in range( 1 ):
         # job description: ujid, pkgname, pkgsrc
-        jd = JobDescription( str( i ), str( i ), 'https://aur.archlinux.org/packages/rr62x/rr62x.tar.gz' )
+        jd = JobDescription( str( i ), pkgname, 'https://aur.archlinux.org/packages/' + pkgname + '/' + pkgname + '.tar.gz' )
         jo.add_job( jd )

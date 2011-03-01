@@ -5,6 +5,7 @@ import urllib.request
 import os
 import tarfile
 from multiprocessing import Process, Queue
+from subprocess import Popen
 
 class JobOverlord( threading.Thread ):
     ''' controls all the poor joblings running on the server '''
@@ -34,7 +35,8 @@ def worker( job_queue, worker_id ):
 
         # update state here (running)
 
-        current_job.job()
+        # need to send unique chroot path per worker
+        current_job.job( '/var/tmp/quarters/chroots' + str( worker_id ) )
 
         # update state here (done)
 
@@ -47,7 +49,7 @@ class JobDescription:
         self.package_name = package_name
         self.package_source = package_source
 
-    def job( self ):
+    def job( self, chroot_path ):
         print( 'thread %s sleeping for 2 seconds' % ( self.package_name ) )
 
         time.sleep( 2 )
@@ -67,3 +69,5 @@ class JobDescription:
 
         temp_tar = tarfile.open( pkgsrc_path )
         temp_tar.extractall( job_path )
+
+        Popen( ['/usr/bin/testing-x86_64-build', '-r', chroot_path ], cwd=os.path.join( job_path, self.package_name ) )

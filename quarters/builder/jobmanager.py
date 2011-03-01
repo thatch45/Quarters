@@ -64,4 +64,5 @@ class JobDescription:
         temp_tar = tarfile.open( pkgsrc_path )
         temp_tar.extractall( job_path )
 
-        return_code = subprocess.call( [ '/usr/bin/extra-x86_64-build', '-r', chroot_path ], cwd=pkg_path )
+        chroot_cmd = [ '/usr/bin/extra-x86_64-build', '-r', chroot_path ]
+        return_code = subprocess.call( chroot_cmd, cwd=pkg_path )

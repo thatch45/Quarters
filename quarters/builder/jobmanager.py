@@ -1,6 +1,5 @@
 import threading
 import time
-from queue import Queue
 from quarters.state import State
 import urllib.request
 import os
@@ -8,11 +7,7 @@ import tarfile
 from multiprocessing import Process, Queue
 
 class JobOverlord( threading.Thread ):
-    '''
-
-    controls all the poor joblings running on the server
-
-    '''
+    ''' controls all the poor joblings running on the server '''
 
     def __init__( self, max_jobs ):
         threading.Thread.__init__( self )
@@ -44,11 +39,7 @@ def worker( job_queue, worker_id ):
         # update state here (done)
 
 class JobDescription:
-    '''
-
-    a structure to store a job description
-
-    '''
+    ''' a structure to store a job description '''
 
     # ujid - unique job id, given out by master
     def __init__( self, ujid, package_name, package_source ):

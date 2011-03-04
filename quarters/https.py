@@ -82,4 +82,5 @@ def partner_https(addr, port, basedir, pem):
     multiprocessing.Process(target=serve_https(addr, port, basedir, pem)).start()
 
 if __name__ == '__main__':
+    print(sys.argv[1], sys.argv[2])
     serve_https(sys.argv[1], sys.argv[2])

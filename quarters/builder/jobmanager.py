@@ -3,7 +3,7 @@ from quarters.state import State
 import urllib.request
 import os
 import tarfile
-from multiprocessing import Process, Queue
+from multiprocessing import Process, Queue, Lock
 import subprocess
 
 class JobOverlord( threading.Thread ):
@@ -12,32 +12,43 @@ class JobOverlord( threading.Thread ):
     def __init__( self, max_jobs ):
         threading.Thread.__init__( self )
         self.max_jobs = max_jobs
-        self.plist = []
+        self.processlist = []
         self.pending_jobs = Queue()
+        self.job_states = {}
+        mutex = Lock() # used for the job_states
 
     def run( self ):
         for i in range( self.max_jobs ):
-            p = Process( target=worker, args=( self.pending_jobs, i ) )
+            p = Process( target=worker, args=( self.pending_jobs, i, self.mutex ) )
             p.start()
-            self.plist.append( p )
+            self.processlist.append( p )
 
-        for p in self.plist:
+        for p in self.processlist:
             p.join()
 
     def add_job( self, job_description ):
         self.pending_jobs.put( job_description )
+        self.mutex.acquire()
+        job_states[ job_description.ujid ] = 'notdone'
+        self.mutex.release()
 
-def worker( job_queue, worker_id ):
+def worker( job_queue, worker_id, job_states_lock ):
     ''' worker where the grunt work takes place '''
     while 1:
         current_job = job_queue.get()
 
         # update state here (running)
+        job_states_lock.acquire()
+        job_states[ current_job.ujid ] = 'inprogress'
+        job_states_lock.release()
 
         # need to send unique chroot path per worker
         current_job.job( worker_id )
 
         # update state here (done)
+        job_states_lock.acquire()
+        job_states[ current_job.ujid ] = 'done'
+        job_states_lock.release()
 
 class JobDescription:
     ''' a structure to store a job description '''

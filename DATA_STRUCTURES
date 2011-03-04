@@ -18,7 +18,6 @@ Builder State structure:
 server - Builder
 http location - /builder_state.qjz
 {'key': 'random key generated when the builder starts',
- 'chroots': int(<number of chroots>),
  'building: [<pkgname>, ...]',
  ready {'package name': {
             'pkgurl: <url>',

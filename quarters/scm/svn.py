@@ -83,12 +83,34 @@ class SVN:
         {'<package name>': {'version': '<pkgver>',
                             'deps': '<unavailable deps>'}
         '''
+        # 
+        # This method should be in the to be created SCM base class
+        #
         # Things to check:
         # PKGBUILD version vs the bin version
         # If there is a corresponding bin_pkg
         # Get a list of package deps, and list only the ones that cannot be met
+        pkgs = []
+        scm_pkgs = []
         repo_info = self._update_repos()
+        for base in repo_info:
+            for fn_ in repo_info[base]['files']:
+                path = os.path.join(base, fn_)
+                pkgd = self.utils.parse_pkgbuild(path)
+                pkgd['PKGBUILD'] = path
+                svn_pkgs.append(pkginfo)
         bin_pkgs = self.pacman.repo_pkgs()
-        pkgs = {}
+        for pkgd in svn_pkgs:
+            version = ''
+            names = set()
+            for key in pkgd:
+                if pkgd[key].has_key('name'):
+                    names.add(pkgd[key]['name'])
+                if pkgd[key].has_key('version'):
+                    version = version if pkgd[key]['version'] < version else pkgd[key]['version']
+            
+                
+        # if package is not in bin_pkgs - add pkg
+        
 
 

@@ -34,7 +34,7 @@ class JobOverlord( threading.Thread ):
         try:
             return self.job_state[ ujid ]
         except KeyError:
-            return 'ujid_state_does_not_exist'
+            return 'doesnotexist'
 
 def worker( job_queue, worker_id, job_states ):
     ''' worker where the grunt work takes place '''

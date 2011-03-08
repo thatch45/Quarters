@@ -30,6 +30,12 @@ class JobOverlord( threading.Thread ):
         self.pending_jobs.put( job_description )
         self.job_states[ job_description.ujid ] = 'notdone'
 
+    def get_ujid_state( self, ujid ):
+        try:
+            return self.job_state[ ujid ]
+        except KeyError:
+            return 'ujid_state_does_not_exist'
+
 def worker( job_queue, worker_id, job_states ):
     ''' worker where the grunt work takes place '''
     while 1:

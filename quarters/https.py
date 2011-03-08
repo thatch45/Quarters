@@ -33,7 +33,6 @@ class SecureHTTP(socketserver.ThreadingMixIn, http.server.HTTPServer):
         self.server_bind()
         self.server_activate()
 
-
 def master_url():
     '''
     Retrive the master url from the configuration

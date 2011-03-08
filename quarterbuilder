@@ -15,11 +15,13 @@ manager = Manager()
 job_states = manager.dict()
 
 class MainHandler(tornado.web.RequestHandler):
+    def initialize( self, job_states ):
+        self.job_states = job_states
     def get(self):
-        self.write(str(job_states))
+        self.write(str(self.job_states))
 
 application = tornado.web.Application([
-    (r"/global_status", MainHandler),
+    (r"/global_status", MainHandler, dict(job_states=job_states)),
 ])
 
 if __name__ == '__main__':

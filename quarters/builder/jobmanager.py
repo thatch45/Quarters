@@ -3,7 +3,7 @@ from quarters.state import State
 import urllib.request
 import os
 import tarfile
-from multiprocessing import Process, Queue, Manager
+from multiprocessing import Process, Queue
 import subprocess
 
 class JobOverlord( threading.Thread ):
@@ -14,8 +14,6 @@ class JobOverlord( threading.Thread ):
         self.max_jobs = max_jobs
         self.processlist = []
         self.pending_jobs = Queue()
-        #self.manager = Manager()
-        #self.job_states = self.manager.dict()
         self.job_states = job_states
 
     def run( self ):

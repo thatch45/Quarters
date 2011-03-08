@@ -7,6 +7,7 @@ ujid = unique job id
 status:notdone or inprogress or done or doesnotexist
 
 Global Status {‘<ujid>’: ‘<status>’,...}
+/global_status
 
 if done:
 /ujid/list_of_packages

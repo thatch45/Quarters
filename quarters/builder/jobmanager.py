@@ -9,13 +9,14 @@ import subprocess
 class JobOverlord( threading.Thread ):
     ''' controls all the poor joblings running on the server '''
 
-    def __init__( self, max_jobs ):
+    def __init__( self, max_jobs, job_states ):
         threading.Thread.__init__( self )
         self.max_jobs = max_jobs
         self.processlist = []
         self.pending_jobs = Queue()
-        self.manager = Manager()
-        self.job_states = self.manager.dict()
+        #self.manager = Manager()
+        #self.job_states = self.manager.dict()
+        self.job_states = job_states
 
     def run( self ):
         for worker_id in range( self.max_jobs ):

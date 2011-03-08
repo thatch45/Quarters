@@ -6,12 +6,28 @@ import quarters.config
 
 import time
 
+import tornado.ioloop
+import tornado.web
+
+from multiprocessing import Manager
+
+manager = Manager()
+job_states = manager.dict()
+
+class MainHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.write(str(job_states))
+
+application = tornado.web.Application([
+    (r"/global_status", MainHandler),
+])
+
 if __name__ == '__main__':
     config = quarters.config.read_builder('conf/builder.conf')
 
     # set maximum number of simultaneous chroots
     #jo = JobOverlord( config['chroots'] )
-    jo = JobOverlord( 2 )
+    jo = JobOverlord( 2, job_states )
     jo.start()
 
     pkgname = 'libuser'
@@ -27,3 +43,6 @@ if __name__ == '__main__':
     jd = JobDescription( '1', pkgname, pkgurl )
 
     jo.add_job( jd )
+
+    application.listen(8888)
+    tornado.ioloop.IOLoop.instance().start()

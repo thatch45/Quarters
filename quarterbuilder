@@ -6,25 +6,14 @@ import quarters.config
 
 import time
 
-import tornado.ioloop
-import tornado.web
-
 from multiprocessing import Manager
 
-manager = Manager()
-job_states = manager.dict()
-
-class MainHandler(tornado.web.RequestHandler):
-    def initialize( self, job_states ):
-        self.job_states = job_states
-    def get(self):
-        self.write(str(self.job_states))
-
-application = tornado.web.Application([
-    (r"/global_status", MainHandler, dict(job_states=job_states)),
-])
+from quarters.builder.spout import Spout
 
 if __name__ == '__main__':
+    manager = Manager()
+    job_states = manager.dict()
+
     config = quarters.config.read_builder('conf/builder.conf')
 
     # set maximum number of simultaneous chroots
@@ -44,5 +33,6 @@ if __name__ == '__main__':
 
     jo.add_job( jd )
 
-    application.listen(8888)
-    tornado.ioloop.IOLoop.instance().start()
+    # get it up!
+    webserver = Spout( job_states )
+    webserver.start()

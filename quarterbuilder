@@ -19,7 +19,7 @@ if __name__ == '__main__':
 
     # set maximum number of simultaneous chroots
     #jo = JobOverlord( config['chroots'] )
-    jo = JobOverlord( 2, job_states )
+    jo = JobOverlord( int( config['chroots'] ), job_states, config['chroot_base'] )
     jo.start()
 
     pkgname = 'libuser'

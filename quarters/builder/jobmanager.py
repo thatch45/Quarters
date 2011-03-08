@@ -15,11 +15,11 @@ class JobOverlord( threading.Thread ):
         self.processlist = []
         self.pending_jobs = Queue()
         self.job_states = {}
-        mutex = Lock() # used for the job_states
+        self.mutex = Lock() # used for the job_states
 
     def run( self ):
         for i in range( self.max_jobs ):
-            p = Process( target=worker, args=( self.pending_jobs, i, self.mutex ) )
+            p = Process( target=worker, args=( self.pending_jobs, i, self.mutex, self.job_states ) )
             p.start()
             self.processlist.append( p )
 
@@ -29,10 +29,10 @@ class JobOverlord( threading.Thread ):
     def add_job( self, job_description ):
         self.pending_jobs.put( job_description )
         self.mutex.acquire()
-        job_states[ job_description.ujid ] = 'notdone'
+        self.job_states[ job_description.ujid ] = 'notdone'
         self.mutex.release()
 
-def worker( job_queue, worker_id, job_states_lock ):
+def worker( job_queue, worker_id, job_states_lock, job_states ):
     ''' worker where the grunt work takes place '''
     while 1:
         current_job = job_queue.get()

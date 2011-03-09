@@ -1,5 +1,6 @@
 import tornado.ioloop
 import tornado.web
+import json
 
 import glob
 
@@ -7,13 +8,13 @@ class GlobalStatusHandler(tornado.web.RequestHandler):
     def initialize( self, job_states ):
         self.job_states = job_states
     def get( self ):
-        self.write( str( self.job_states ) )
+        self.write( json.dumps( dict(self.job_states) ) )
 
 class ListOfPackagesHandler(tornado.web.RequestHandler):
     def get( self, ujid ):
         results = glob.glob( '/var/tmp/quarters/' + str( ujid ) + '/*.pkg.tar.xz' )
         results = list( map( lambda x: x.split('/')[-1], results ) )
-        self.write( str( results ) )
+        self.write( json.dumps( list(results) ) )
 
 class PackageHandler(tornado.web.RequestHandler):
     def get( self, ujid, pkg ):

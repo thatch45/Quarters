@@ -58,7 +58,6 @@ def worker( job_queue, worker_id, job_states, chroot_base ):
         return_code = subprocess.call( chroot_cmd, cwd=pkg_path )
 
         mvcmd = '/bin/mv -f ' + pkg_path + '/*.pkg.tar.xz ' + job_path
-        print( mvcmd )
         return_code = subprocess.call( mvcmd , shell=True )
         ###### end building
 

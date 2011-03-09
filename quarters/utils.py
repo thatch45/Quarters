@@ -4,7 +4,7 @@ General utilities
 import os
 import sys
 import subprocess
-
+import urllib.request
 
 def parse_pkgbuild(path):
     '''
@@ -53,3 +53,6 @@ def parse_pkg_data(data):
             pkgd[val].append(line.strip())
     return pkgd
 
+def get_url( url ):
+    ''' returns the contents at the url '''
+    return urllib.request.urlopen( url ).read()

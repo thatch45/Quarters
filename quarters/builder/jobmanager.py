@@ -9,13 +9,13 @@ import subprocess
 class JobOverlord( threading.Thread ):
     ''' controls all the poor joblings running on the server '''
 
-    def __init__( self, max_jobs, job_states, chroot_base ):
+    def __init__( self, job_states, config ):
         threading.Thread.__init__( self )
-        self.max_jobs = max_jobs
+        self.max_jobs = int( config['chroots'] )
         self.processlist = []
         self.pending_jobs = Queue()
         self.job_states = job_states
-        self.chroot_base = chroot_base
+        self.chroot_base = config['chroot_base']
 
     def run( self ):
         for worker_id in range( self.max_jobs ):
@@ -42,7 +42,7 @@ def worker( job_queue, worker_id, job_states, chroot_base ):
         job_path = os.path.join( '/var/tmp/quarters/', current_job.ujid )
         pkgsrc_path = os.path.join( job_path, current_job.package_name + '.tar.gz' )
         pkg_path = os.path.join( job_path, current_job.package_name )
-        chroot_path = chroot_base + '/' + str( worker_id )
+        chroot_path = os.path.join( chroot_base, str( worker_id ) )
 
         os.makedirs( job_path, exist_ok=True )
 

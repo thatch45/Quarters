@@ -21,18 +21,6 @@ if __name__ == '__main__':
     jo = JobOverlord( job_states, config )
     jo.start()
 
-    pkgname = 'libuser'
-    pkgurl = 'https://aur.archlinux.org/packages/' + pkgname + '/' + pkgname + '.tar.gz'
-
-    # job description: ujid, pkgname, pkgsrc
-    jd = JobDescription( '0', pkgname, pkgurl )
-    jo.add_job( jd )
-
-    time.sleep( 2 )
-    jd = JobDescription( '1', pkgname, pkgurl )
-
-    jo.add_job( jd )
-
     # get it up!
     webserver = Spout( job_states )
     webserver.start()

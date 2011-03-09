@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from quarters.builder.jobmanager import JobOverlord, JobDescription
+from quarters.builder.jobmanager import JobOverlord
 
 import quarters.config
 

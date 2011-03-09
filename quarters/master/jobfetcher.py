@@ -5,6 +5,7 @@ import os
 import tarfile
 import subprocess
 import time
+from quarters.jobdescription import JobDescription
 
 class JobFetcher( threading.Thread ):
     ''' controls all the poor joblings running on the server '''
@@ -19,7 +20,7 @@ class JobFetcher( threading.Thread ):
         i = 0
         while 1:
             # keep 1 job in the buffer
-            if self.pending_jobs.qsize() < 1:
+            if self.pending_jobs.qsize() < 2:
                 pkgname = 'libuser'
                 pkgurl = 'https://aur.archlinux.org/packages/' + pkgname + '/' + pkgname + '.tar.gz'
 
@@ -27,18 +28,10 @@ class JobFetcher( threading.Thread ):
                 jd = JobDescription( i, pkgname, pkgurl )
                 self.add_job( jd )
 
-                time.sleep( 2 )
+                time.sleep( 10 )
                 i += 1
+            # do check ups here on package status on builders
 
     def add_job( self, job_description ):
         self.pending_jobs.put( job_description )
         self.job_states[ job_description.ujid ] = 'notdone'
-
-class JobDescription:
-    ''' a structure to store a job description '''
-
-    # ujid - unique job id, given out by master
-    def __init__( self, ujid, package_name, package_source ):
-        self.ujid = ujid
-        self.package_name = package_name
-        self.package_source = package_source

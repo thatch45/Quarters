@@ -10,31 +10,29 @@ class GlobalStatusHandler(tornado.web.RequestHandler):
     def get( self ):
         self.write( json.dumps( dict(self.job_states) ) )
 
-class ListOfPackagesHandler(tornado.web.RequestHandler):
-    def get( self, ujid ):
-        results = glob.glob( '/var/tmp/quarters/' + str( ujid ) + '/*.pkg.tar.xz' )
-        results = list( map( lambda x: x.split('/')[-1], results ) )
-        self.write( json.dumps( list(results) ) )
-
 class JobHandler(tornado.web.RequestHandler):
-    def get( self, ujid, pkg ):
-        self.set_header('Content-Type', 'application/octet-stream')
-        pkgul = '/var/tmp/quarters/' + str( ujid ) + '/' + str( pkg )
-        with open( pkgul, 'rb' ) as fp:
-            self.write( fp.read() )
+    ''' return new job, or return nothing to be done '''
+    def initialize( self, pending_jobs ):
+        self.pending_jobs = pending_jobs
+    def get( self ):
+        try:
+            jd = self.pending_jobs.get_nowait()
+            self.write( jd.dump_json() )
+        except:
+            self.write( 'NOJOBS' )
 
 class Spout:
     ''' webserver for the builder '''
 
-    def __init__( self, job_states, port=8888 ):
+    def __init__( self, job_states, pending_jobs, port=8888 ):
         self.job_states = job_states
+        self.pending_jobs = pending_jobs
         self.port = port
 
     def start( self ):
         application = tornado.web.Application( [
             ( r"/global_status", GlobalStatusHandler, dict( job_states=self.job_states ) ),
-            ( r"/([0-9]+)/list_of_packages", ListOfPackagesHandler ),
-            ( r"/([0-9]+)/(.*.pkg.tar.xz)", PackageHandler ),
+            ( r"/job", JobHandler, dict( pending_jobs=self.pending_jobs ) ),
         ] )
 
         application.listen( self.port )

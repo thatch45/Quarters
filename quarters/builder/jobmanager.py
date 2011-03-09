@@ -1,11 +1,11 @@
 import threading
-from quarters.state import State
 import urllib.request
 import os
 import tarfile
 from multiprocessing import Process, Queue
 import subprocess
 import time
+from quarters.jobdescription import JobDescription
 
 class JobOverlord( threading.Thread ):
     ''' controls all the poor joblings running on the server '''
@@ -81,12 +81,3 @@ def worker( job_queue, worker_id, job_states, chroot_base ):
 
         # update state here (done)
         job_states[ current_job.ujid ] = 'done'
-
-class JobDescription:
-    ''' a structure to store a job description '''
-
-    # ujid - unique job id, given out by master
-    def __init__( self, ujid, package_name, package_source ):
-        self.ujid = ujid
-        self.package_name = package_name
-        self.package_source = package_source

@@ -24,7 +24,8 @@ server still not done
 job=
 [{'pkgname': <name>,
   'srcpkg': <path to srcpkg>,
-  ‘sum’: <srcpkgsum>,
+  ‘sha256sum’: <srcpkgsum>,
+  'architecture': <i686,x86_64,any>
   'ujid': <some cool random num, like a shasum with padding :P>}, ...]
 
 /job

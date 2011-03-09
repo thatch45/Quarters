@@ -1,5 +1,9 @@
 late night talks about our protocol
 
+http ports:
+builder - 8888
+master - 8889
+
 worker protocol is pretty much done
 ================= /worker/ ====================
 ujid = unique job id

@@ -39,6 +39,7 @@ class JobOverlord( threading.Thread ):
 
                 time.sleep( 2 )
                 i += 1
+                # get jobs from master, if none, returns NOJOBS
 
         # join all the processes, could probably remove this
         for p in self.processlist:

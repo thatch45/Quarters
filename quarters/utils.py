@@ -45,7 +45,6 @@ def parse_pkg_data(data):
     '''
     pkgd = {}
     val = None
-    pkgd[]
     for line in data.split('\n'):
         if line.startswith('%'):
             val = line.strip('%').lower()

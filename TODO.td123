@@ -1,5 +1,5 @@
 stuff for now
-set up server with packages to build, and set up worker to read state, and add to job queue
+set up worker to read state, and add to job queue
 
 stuff for later
 create state fetcher (hermes)

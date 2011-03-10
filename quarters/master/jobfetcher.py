@@ -25,7 +25,7 @@ class JobFetcher( threading.Thread ):
                 pkgurl = 'https://aur.archlinux.org/packages/' + pkgname + '/' + pkgname + '.tar.gz'
 
                 # job description: ujid, pkgname, pkgsrc
-                jd = JobDescription( i, pkgname, pkgurl )
+                jd = JobDescription( str(i), pkgname, pkgurl )
                 self.add_job( jd )
 
                 time.sleep( 10 )

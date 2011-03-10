@@ -18,6 +18,7 @@ class JobOverlord( threading.Thread ):
         self.pending_jobs = Queue()
         self.job_states = job_states
         self.chroot_base = config['chroot_base']
+        self.master = config['master']
 
     def run( self ):
         # start all the workers
@@ -42,7 +43,8 @@ class JobOverlord( threading.Thread ):
                 #i += 1
                 # get jobs from master, if none, returns NOJOBS
                 # todo: make port optional
-                ret = get_url( config['master'] + ':8889/job' )
+                #ret = get_url( 'http://' + self.master + ':8889/job' )
+                ret = get_url( 'http://0.0.0.0:8889/job' ).decode( 'utf-8' )
                 if ret != 'NOJOBS':
                     jd = JobDescription( 0, 0, 0 )
                     jd.load_json( ret )

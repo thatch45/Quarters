@@ -1,36 +1,43 @@
 late night talks about our protocol
 
 http ports:
-builder - 8888
-master - 8889
+master - 1337
+builder - 1338
 
 worker protocol is pretty much done
 ================= /worker/ ====================
-ujid = unique job id
+ujid = unique job id, no two jobs will ever have the same ujid
 
-status:notdone or inprogress or done or doesnotexist
-
-Global Status {‘<ujid>’: ‘<status>’,...}
+used to check up on progress
 /global_status
+{
+ <ujid> : <status;notdone,inprogress,done,doesnotexist>’,
+ ...
+}
 
-if done:
+if done provide the following interface:
 /ujid/list_of_packages
+{
+ pkglist : {
+            "a.pkg.tar.xz",
+            "b.pkg.tar.xz",
+            ...
+           }
+}
 
-list_of_packages:
-{ pkglist:{“a.pkg.tar.xz”,” b.pkg.tar.xz”, …} }
-
+if done, also provide a way to access the built packages.
 /ujid/a.pkg.tar.xz
 /ujid/b.pkg.tar.xz
 
 
 server still not done
 ==================/server/====================
-job=
-[{'pkgname': <name>,
-  'srcpkg': <path to srcpkg>,
-  ‘sha256sum’: <srcpkgsum>,
-  'architecture': <i686,x86_64,any>
-  'ujid': <some cool random num, like a shasum with padding :P>}, ...]
-
+returns a job from a pool and removes it from its internal list of unassigned jobs
 /job
-returns a {job} from a pool and removes it from it’s internal list of unassigned jobs
+{
+ 'pkgname': <name>,
+ 'srcpkg': <path to srcpkg>,
+ ‘sha256sum’: <srcpkgsum>,
+ 'architecture': <i686,x86_64,any>
+ 'ujid': <some cool random num, like a shasum with padding :P>
+}

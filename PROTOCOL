@@ -11,7 +11,7 @@ ujid = unique job id, no two jobs will ever have the same ujid
 used to check up on progress
 /global_status
 {
- <ujid> : <status - notdone,inprogress,done,failed>’,
+ <ujid> : <status - notdone,inprogress,done,failed>,
  ...
 }
 
@@ -31,7 +31,6 @@ if done, also provide a way to access the built packages.
 if done, also provide the full build log
 /ujid/build_log
 
-server still not done
 ==================/server/====================
 returns a job from a pool and removes it from its internal list of unassigned jobs
 /job
@@ -42,3 +41,26 @@ returns a job from a pool and removes it from its internal list of unassigned jo
  'architecture': <i686,x86_64,any>
  'ujid': <some cool random num, like a shasum with padding :P>
 }
+
+used to keep track of all the jobs handed out
+/global_status
+{
+ <ujid> : <status - notdone,inprogress,done,failed,downloading>,
+ ...
+}
+
+if done provide the following interface:
+/ujid/list_of_packages
+[
+ {
+  pkgname : "a.pkg.tar.xz",
+  sha256sum : <sha256sum>
+ }
+ ...
+]
+
+if done, also provide a way to access the built packages.
+/ujid/a.pkg.tar.xz
+
+if done, also provide the full build log
+/ujid/build_log

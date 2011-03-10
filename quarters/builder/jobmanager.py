@@ -19,6 +19,7 @@ class JobOverlord( threading.Thread ):
         self.job_states = job_states
         self.chroot_base = config['chroot_base']
         self.master = config['master']
+        self.master_port = config['master_port']
 
     def run( self ):
         # start all the workers
@@ -32,7 +33,8 @@ class JobOverlord( threading.Thread ):
         while 1:
             # keep 1 job in the buffer
             if self.pending_jobs.qsize() < 1:
-                ret = get_url( 'http://0.0.0.0:8889/job' ).decode( 'utf-8' )
+                ret = get_url( 'http://0.0.0.0:' + str( self.master_port ) + '/job' ).decode( 'utf-8' )
+                print( ret )
                 if ret != 'NOJOBS':
                     jd = JobDescription( 0, 0, 0 )
                     jd.load_json( ret )

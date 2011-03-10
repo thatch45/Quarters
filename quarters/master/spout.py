@@ -24,10 +24,10 @@ class JobHandler(tornado.web.RequestHandler):
 class Spout:
     ''' webserver for the builder '''
 
-    def __init__( self, job_states, pending_jobs, port=8889 ):
+    def __init__( self, job_states, pending_jobs, config ):
         self.job_states = job_states
         self.pending_jobs = pending_jobs
-        self.port = port
+        self.port = config['master_port']
 
     def start( self ):
         application = tornado.web.Application( [

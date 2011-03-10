@@ -26,9 +26,9 @@ class PackageHandler(tornado.web.RequestHandler):
 class Spout:
     ''' webserver for the builder '''
 
-    def __init__( self, job_states, port=8888 ):
+    def __init__( self, job_states, config ):
         self.job_states = job_states
-        self.port = port
+        self.port = config['builder_port']
 
     def start( self ):
         application = tornado.web.Application( [

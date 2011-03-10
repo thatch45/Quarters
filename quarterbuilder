@@ -22,5 +22,5 @@ if __name__ == '__main__':
     jo.start()
 
     # get it up!
-    webserver = Spout( job_states )
+    webserver = Spout( job_states, config )
     webserver.start()

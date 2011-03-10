@@ -1,4 +1,5 @@
 stuff for now
+make server and JobDescription conform to PROTOCOL
 
 stuff for later
 find out if current devtools set chroot barrier. if not patch them so that we don't have to worry about it in quarters

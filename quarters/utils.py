@@ -5,6 +5,7 @@ import os
 import sys
 import subprocess
 import urllib.request
+from hashlib import sha256
 
 def parse_pkgbuild(path):
     '''
@@ -56,3 +57,14 @@ def parse_pkg_data(data):
 def get_url( url ):
     ''' returns the contents at the url '''
     return urllib.request.urlopen( url ).read()
+
+def sha256sum_file( filename ):
+    ''' compute the sha256sum of filename '''
+    s = sha256()
+    with open( filename, 'rb' ) as f:
+        bufsize = 8192
+        data = f.read( bufsize )
+        while data:
+            s.update( data )
+            data = f.read( bufsize )
+    return s.hexdigest()

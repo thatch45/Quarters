@@ -75,7 +75,8 @@ def worker( job_queue, worker_id, job_states, chroot_base ):
         with subprocess.Popen( chroot_cmd, cwd=pkg_path, stdout=subprocess.PIPE, stderr=subprocess.STDOUT) as proc:
             log_path = os.path.join( job_path, 'build_log' )
             with open( log_path, 'wb' ) as f:
-                f.write( proc.stdout.read() )
+                f.write( proc.communicate()[0] )
+            return_code = proc.returncode
 
         mvcmd = '/bin/mv -f ' + pkg_path + '/*.pkg.tar.xz ' + job_path
         return_code = subprocess.call( mvcmd , shell=True )

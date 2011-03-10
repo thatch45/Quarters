@@ -17,7 +17,6 @@ if __name__ == '__main__':
     config = quarters.config.read_builder('conf/builder.conf')
     print( config )
 
-    # set maximum number of simultaneous chroots
     jo = JobOverlord( job_states, config )
     jo.start()
 

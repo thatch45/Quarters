@@ -45,7 +45,7 @@ returns a job from a pool and removes it from its internal list of unassigned jo
 used to keep track of all the jobs handed out
 /global_status
 {
- <ujid> : <status - notdone,inprogress,done,failed,downloading>,
+ <ujid> : <status - notdone,inprogress,done,failed,downloading,stop>,
  ...
 }
 

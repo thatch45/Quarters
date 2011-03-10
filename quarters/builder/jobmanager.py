@@ -32,18 +32,6 @@ class JobOverlord( threading.Thread ):
         while 1:
             # keep 1 job in the buffer
             if self.pending_jobs.qsize() < 1:
-                #pkgname = 'libuser'
-                #pkgurl = 'https://aur.archlinux.org/packages/' + pkgname + '/' + pkgname + '.tar.gz'
-
-                # job description: ujid, pkgname, pkgsrc
-                #jd = JobDescription( i, pkgname, pkgurl )
-                #self.add_job( jd )
-
-                #time.sleep( 2 )
-                #i += 1
-                # get jobs from master, if none, returns NOJOBS
-                # todo: make port optional
-                #ret = get_url( 'http://' + self.master + ':8889/job' )
                 ret = get_url( 'http://0.0.0.0:8889/job' ).decode( 'utf-8' )
                 if ret != 'NOJOBS':
                     jd = JobDescription( 0, 0, 0 )

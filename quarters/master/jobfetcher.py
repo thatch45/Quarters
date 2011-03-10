@@ -1,5 +1,4 @@
 import threading
-from quarters.state import State
 import urllib.request
 import os
 import tarfile

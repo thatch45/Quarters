@@ -11,7 +11,7 @@ ujid = unique job id, no two jobs will ever have the same ujid
 used to check up on progress
 /global_status
 {
- <ujid> : <status - notdone,inprogress,done,doesnotexist,failed>’,
+ <ujid> : <status - notdone,inprogress,done,failed>’,
  ...
 }
 

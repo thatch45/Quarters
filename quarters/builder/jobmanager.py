@@ -51,10 +51,9 @@ def worker( job_queue, worker_id, job_states, chroot_base ):
     while 1:
         current_job = job_queue.get()
 
-        # update state here (running)
+        # update job state here (running)
         job_states[ current_job.ujid ] = 'inprogress'
 
-        ###### start building
         job_path = os.path.join( '/var/tmp/quarters/', str(current_job.ujid) )
         pkgsrc_path = os.path.join( job_path, current_job.package_name + '.tar.gz' )
         pkg_path = os.path.join( job_path, current_job.package_name )
@@ -62,25 +61,32 @@ def worker( job_queue, worker_id, job_states, chroot_base ):
 
         os.makedirs( job_path, exist_ok=True )
 
+        # TODO: implement when we start using https
         # need to make sure that urlretrieve overwrites if existing file with same name is found
         # "If the URL points to a local file, or a valid cached copy of the object exists, the object is not copied."
         # http://docs.python.org/py3k/library/urllib.request.html#urllib.request.urlretrieve
         urllib.request.urlretrieve( current_job.package_source, pkgsrc_path )
 
+        # extract
         temp_tar = tarfile.open( pkgsrc_path )
         temp_tar.extractall( job_path )
 
+        # chroot
         chroot_cmd = [ '/usr/bin/extra-x86_64-build', '-r', chroot_path ]
-        #return_code = subprocess.call( chroot_cmd, cwd=pkg_path )
         with subprocess.Popen( chroot_cmd, cwd=pkg_path, stdout=subprocess.PIPE, stderr=subprocess.STDOUT) as proc:
             log_path = os.path.join( job_path, 'build_log' )
             with open( log_path, 'wb' ) as f:
                 f.write( proc.communicate()[0] )
             return_code = proc.returncode
 
+        # move to final destination
+        # TODO: find a pythonic way of doing this
         mvcmd = '/bin/mv -f ' + pkg_path + '/*.pkg.tar.xz ' + job_path
-        return_code = subprocess.call( mvcmd , shell=True )
+        mv_return_code = subprocess.call( mvcmd , shell=True )
         ###### end building
 
-        # update state here (done)
-        job_states[ current_job.ujid ] = 'done'
+        # update job state (failed or done)
+        if return_code != 0:
+            job_states[ current_job.ujid ] = 'failed'
+        else:
+            job_states[ current_job.ujid ] = 'done'

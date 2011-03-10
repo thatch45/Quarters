@@ -11,24 +11,22 @@ ujid = unique job id, no two jobs will ever have the same ujid
 used to check up on progress
 /global_status
 {
- <ujid> : <status;notdone,inprogress,done,doesnotexist>’,
+ <ujid> : <status - notdone,inprogress,done,doesnotexist,failed>’,
  ...
 }
 
 if done provide the following interface:
 /ujid/list_of_packages
-{
- pkglist : {
-            "a.pkg.tar.xz",
-            "b.pkg.tar.xz",
-            ...
-           }
-}
+[
+ {
+  pkgname : "a.pkg.tar.xz",
+  sha256sum : <sha256sum>
+ }
+ ...
+]
 
 if done, also provide a way to access the built packages.
 /ujid/a.pkg.tar.xz
-/ujid/b.pkg.tar.xz
-
 
 server still not done
 ==================/server/====================

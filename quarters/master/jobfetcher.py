@@ -8,7 +8,7 @@ import time
 from quarters.jobdescription import JobDescription
 
 class JobFetcher( threading.Thread ):
-    ''' controls all the poor joblings running on the server '''
+    ''' manages the status of jobs '''
 
     def __init__( self, job_states, pending_jobs, config ):
         threading.Thread.__init__( self )

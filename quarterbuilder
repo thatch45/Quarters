@@ -4,8 +4,6 @@ from quarters.builder.jobmanager import JobOverlord
 
 import quarters.config
 
-import time
-
 from multiprocessing import Manager
 
 from quarters.builder.spout import Spout

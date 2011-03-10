@@ -41,11 +41,6 @@ class JobOverlord( threading.Thread ):
                     self.add_job( jd )
 
                 time.sleep( 2 )
-                
-
-        # join all the processes, could probably remove this
-        for p in self.processlist:
-            p.join()
 
     def add_job( self, job_description ):
         self.pending_jobs.put( job_description )

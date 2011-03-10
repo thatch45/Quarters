@@ -71,7 +71,11 @@ def worker( job_queue, worker_id, job_states, chroot_base ):
         temp_tar.extractall( job_path )
 
         chroot_cmd = [ '/usr/bin/extra-x86_64-build', '-r', chroot_path ]
-        return_code = subprocess.call( chroot_cmd, cwd=pkg_path )
+        #return_code = subprocess.call( chroot_cmd, cwd=pkg_path )
+        with subprocess.Popen( chroot_cmd, cwd=pkg_path, stdout=subprocess.PIPE, stderr=subprocess.PIPE) as proc:
+            log_path = os.path.join( job_path, 'build_log' )
+            with open( log_path, 'wb' ) as f:
+                f.write( proc.stdout.read() )
 
         mvcmd = '/bin/mv -f ' + pkg_path + '/*.pkg.tar.xz ' + job_path
         return_code = subprocess.call( mvcmd , shell=True )

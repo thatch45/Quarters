@@ -28,6 +28,9 @@ if done provide the following interface:
 if done, also provide a way to access the built packages.
 /ujid/a.pkg.tar.xz
 
+if done, also provide the full build log
+/ujid/build_log
+
 server still not done
 ==================/server/====================
 returns a job from a pool and removes it from its internal list of unassigned jobs

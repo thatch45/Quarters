@@ -11,21 +11,26 @@ class StatusPoller( threading.Thread ):
 
     def run( self ):
         while 1:
+            # cur is the status on master
             cur = fetch_states( self.list_of_ips, self.port )
 
-            print( 'remote status:', cur )
+            print( 'master status:', cur )
             print( 'local status:', self.job_states )
             
             for ( k, v ) in self.job_states.items():
                 if k in cur:
                     if cur[ k ] == 'stop':
+                        # TODO: implement stop
                         # stop job k
+                        self.job_states[ k ] = 'stop'
                         pass
 
-                    if cur[ k ] == 'done' and v != 'done':
+                    if cur[ k ] == 'done' and v == 'done':
+                        # remove from builder since master already synced this job
                         pass
 
-                    if cur[ k ] == 'failed' and v != 'failed':
+                    if cur[ k ] == 'failed' and v == 'failed':
+                        # remove from builder since master already synced this job
                         pass
 
             time.sleep( 2 )

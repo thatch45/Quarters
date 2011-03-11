@@ -20,9 +20,8 @@ if __name__ == '__main__':
     jo = JobOverlord( job_states, config )
     jo.start()
 
-    # list of ips, ports of those ips
-    # master ip/port
-    sp = StatusPoller( job_states, [ '76.191.31.83' ], 1337 )
+    # keep master as list to reuse fetch status
+    sp = StatusPoller( job_states, [ config[ 'master' ] ], config[ 'master_port' ] )
     sp.start()
 
     # get it up!

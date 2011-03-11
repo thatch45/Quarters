@@ -1,5 +1,5 @@
 import threading
-from quarters.utils import get_url
+from quarters.utils import fetch_states
 import json
 import time
 
@@ -10,25 +10,9 @@ class StatusPoller( threading.Thread ):
         self.list_of_ips = list_of_ips
         self.port = port
 
-    def fetch_states( self ):
-        ret = {}
-        for ip in self.list_of_ips:
-            url = 'http://' + ip + ':' + str( self.port ) + '/global_status'
-
-            try:
-                json_data = get_url( url )
-            except:
-                continue
-
-            status = json.loads( json_data.decode('utf-8' ) )
-
-            ret.update( status )
-
-        return ret
-
     def run( self ):
         while 1:
-            cur = self.fetch_states()
+            cur = fetch_states( self.list_of_ips, self.port )
 
             print( 'remote status:', cur )
             print( 'local status:', self.job_states )

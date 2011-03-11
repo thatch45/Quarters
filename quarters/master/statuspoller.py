@@ -1,6 +1,5 @@
 import threading
 from quarters.utils import fetch_states
-import json
 import time
 
 class StatusPoller( threading.Thread ):
@@ -17,29 +16,28 @@ class StatusPoller( threading.Thread ):
             print( 'remote status:', cur )
             print( 'local status:', self.job_states )
             
-            if len( cur ):
-                for ( k, v ) in self.job_states.items():
-                    # skip values that are going to be final
-                    if v in ( 'done', 'failed' ):
-                        pass
+            for ( k, v ) in self.job_states.items():
+                # skip values that are going to be final
+                if v in ( 'done', 'failed' ):
+                    pass
 
-                    if k in cur:
-                        if cur[ k ] == 'done' and v != 'done':
-                            self.job_states[ k ] = 'downloading'
-                            # TODO: download packages and build_log
-                            self.job_states[ k ] = 'done'
+                if k in cur:
+                    if cur[ k ] == 'done' and v != 'done':
+                        self.job_states[ k ] = 'downloading'
+                        # TODO: download packages and build_log
+                        self.job_states[ k ] = 'done'
 
-                        if cur[ k ] == 'failed' and v != 'failed':
-                            self.job_states[ k ] = 'downloading'
-                            # TODO: download packages and build_log
-                            self.job_states[ k ] = 'failed'
+                if cur[ k ] == 'failed' and v != 'failed':
+                    self.job_states[ k ] = 'downloading'
+                    # TODO: download packages and build_log
+                    self.job_states[ k ] = 'failed'
 
-                        if cur[ k ] == 'inprogress':
-                            # we don't give a
-                            pass
+                if cur[ k ] == 'inprogress':
+                    # we don't give a
+                    pass
 
-                        if cur[ k ] == 'notdone':
-                            # we don't give a
-                            pass
+                if cur[ k ] == 'notdone':
+                    # we don't give a
+                    pass
 
             time.sleep( 2 )

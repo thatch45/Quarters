@@ -23,7 +23,7 @@ if __name__ == '__main__':
     jf.start()
 
     # list of ips, ports of those ips
-    sp = StatusPoller( job_states, [ '0.0.0.0' ], 1338 )
+    sp = StatusPoller( job_states, [ '50.56.81.202' ], 1338 )
     sp.start()
 
     # get it up!

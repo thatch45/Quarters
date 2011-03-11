@@ -8,41 +8,49 @@ class StatusPoller( threading.Thread ):
         threading.Thread.__init__( self )
         self.job_states = job_states
         self.list_of_ips = list_of_ips
+        self.port = port
 
     def fetch_states( self ):
         ret = {}
         for ip in self.list_of_ips:
+            url = 'http://' + ip + ':' + str( self.port ) + '/global_status'
+
             try:
-                status = json.loads( get_url( 'http://' + ip + ':' + str( port ) + '/global_status' ) )
-                ret.update( status )
-                # remove if dict.update works
-                #for k, v in status:
-                #    a[k] = v
+                json_data = get_url( url )
             except:
                 continue
 
+            status = json.loads( json_data.decode('utf-8' ) )
+
+            ret.update( status )
+
+        return ret
+
     def run( self ):
         while 1:
-            cur = fetch_states()
+            cur = self.fetch_states()
 
-            for k, v in self.job_states:
-                # skip values that are going to be final
-                if v in ( 'done', 'failed' ):
-                    continue
+            print( 'remote status:', cur )
+            print( 'local status:', self.job_states )
 
-                if cur[ k ] in ( 'done', 'failed' ):
-                    self.job_states[ k ] = 'downloading'
-                    # TODO: download packages and build_log
-                    self.job_states[ k ] = cur[ k ]
+            
+            if len( cur ):
+                for ( k, v ) in self.job_states:
+                    # skip values that are going to be final
+                    if v in ( 'done', 'failed' ):
+                        pass
 
-                if cur[ k ] == 'inprogress':
-                    # we don't give a
-                    pass
+                    if cur[ k ] in ( 'done', 'failed' ) and v not in ( 'done', 'failed' ):
+                        self.job_states[ k ] = 'downloading'
+                        # TODO: download packages and build_log
+                        self.job_states[ k ] = cur[ k ]
 
-                if cur[ k ] == 'notdone':
-                    # we don't give a
-                    pass
+                    if cur[ k ] == 'inprogress':
+                        # we don't give a
+                        pass
 
-            print( self.job_states )
+                    if cur[ k ] == 'notdone':
+                        # we don't give a
+                        pass
 
             time.sleep( 2 )

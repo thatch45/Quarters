@@ -6,7 +6,7 @@ import quarters.config
 
 from multiprocessing import Manager
 
-from quarters.builder.spout import Spout
+from quarters.builder.spout import start_builder_web
 
 if __name__ == '__main__':
     manager = Manager()
@@ -19,5 +19,4 @@ if __name__ == '__main__':
     jo.start()
 
     # get it up!
-    webserver = Spout( job_states, config )
-    webserver.start()
+    start_builder_web( job_states, config['builder_port'] )

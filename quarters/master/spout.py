@@ -1,6 +1,6 @@
 import tornado.web
 
-from quarters.common_spout_interface import Spout, GlobalStatusHandler
+from quarters.common_spout_interface import Spout, GlobalStatusHandler, ListOfPackagesHandler, PackageHandler, BuildLogHandler
 
 class JobHandler(tornado.web.RequestHandler):
     ''' handles /job '''
@@ -19,7 +19,10 @@ def start_master_web( job_states, pending_jobs, port ):
     application = tornado.web.Application( [
      ( r"/global_status", GlobalStatusHandler, dict( job_states=job_states ) ),
      ( r"/job", JobHandler, dict( pending_jobs=pending_jobs ) ),
+     ( r"/([0-9]+)/list_of_packages", ListOfPackagesHandler ),
+     ( r"/([0-9]+)/(.*.pkg.tar.xz)", PackageHandler ),
+     ( r"/([0-9]+)/build_log", BuildLogHandler ),
     ] )
 
-    ws = Spout( job_states, pending_jobs, port, application )
+    ws = Spout( port, application )
     ws.start()

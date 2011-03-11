@@ -16,7 +16,7 @@ if __name__ == '__main__':
 
     pending_jobs = manager.Queue()
 
-    config = quarters.config.read_master('conf/master.conf')
+    config = quarters.config.read_config('conf/quarters.conf')
     print( config )
 
     jf = JobFetcher( job_states, pending_jobs )

@@ -14,7 +14,7 @@ if __name__ == '__main__':
     manager = Manager()
     job_states = manager.dict()
 
-    config = quarters.config.read_builder('conf/builder.conf')
+    config = quarters.config.read_config('conf/quarters.conf')
     print( config )
 
     jo = JobOverlord( job_states, config )

@@ -8,6 +8,8 @@ from multiprocessing import Manager
 
 from quarters.builder.spout import start_builder_web
 
+from quarters.master.statuspoller import StatusPoller
+
 if __name__ == '__main__':
     manager = Manager()
     job_states = manager.dict()
@@ -17,6 +19,11 @@ if __name__ == '__main__':
 
     jo = JobOverlord( job_states, config )
     jo.start()
+
+    # list of ips, ports of those ips
+    # master ip/port
+    sp = StatusPoller( job_states, [ '76.191.31.83' ], 1337 )
+    sp.start()
 
     # get it up!
     start_builder_web( job_states, config['builder_port'] )

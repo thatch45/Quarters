@@ -6,6 +6,7 @@ import sys
 import subprocess
 import urllib.request
 from hashlib import sha256
+import json
 
 def parse_pkgbuild(path):
     '''

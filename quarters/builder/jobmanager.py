@@ -33,7 +33,7 @@ class JobOverlord( threading.Thread ):
         while 1:
             # keep 1 job in the buffer
             if self.pending_jobs.qsize() < 1:
-                ret = get_url( 'http://0.0.0.0:' + str( self.master_port ) + '/job' ).decode( 'utf-8' )
+                ret = get_url( 'http://' + self.master + ':' + str( self.master_port ) + '/job' ).decode( 'utf-8' )
                 print( ret )
                 if ret != 'NOJOBS':
                     jd = JobDescription( 0, 0, 0 )

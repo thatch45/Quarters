@@ -19,11 +19,11 @@ if __name__ == '__main__':
     config = quarters.config.read_master('conf/master.conf')
     print( config )
 
-    jf = JobFetcher( job_states, pending_jobs, config )
+    jf = JobFetcher( job_states, pending_jobs )
     jf.start()
 
     # list of ips, ports of those ips
-    sp = StatusPoller( job_states, [ '50.56.81.202' ], 1338 )
+    sp = StatusPoller( job_states, config[ 'builders' ], config[ 'builder_port' ] )
     sp.start()
 
     # get it up!

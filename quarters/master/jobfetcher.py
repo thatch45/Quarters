@@ -9,7 +9,7 @@ from quarters.jobdescription import JobDescription
 class JobFetcher( threading.Thread ):
     ''' manages the status of jobs '''
 
-    def __init__( self, job_states, pending_jobs, config ):
+    def __init__( self, job_states, pending_jobs ):
         threading.Thread.__init__( self )
         self.pending_jobs = pending_jobs
         self.job_states = job_states

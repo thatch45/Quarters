@@ -27,17 +27,17 @@ class StatusPoller( threading.Thread ):
                         # TODO: download packages and build_log
                         self.job_states[ k ] = 'done'
 
-                if cur[ k ] == 'failed' and v != 'failed':
-                    self.job_states[ k ] = 'downloading'
-                    # TODO: download packages and build_log
-                    self.job_states[ k ] = 'failed'
+                    if cur[ k ] == 'failed' and v != 'failed':
+                        self.job_states[ k ] = 'downloading'
+                        # TODO: download packages and build_log
+                        self.job_states[ k ] = 'failed'
 
-                if cur[ k ] == 'inprogress':
-                    # we don't give a
-                    pass
+                    if cur[ k ] == 'inprogress':
+                        # we don't give a
+                        pass
 
-                if cur[ k ] == 'notdone':
-                    # we don't give a
-                    pass
+                    if cur[ k ] == 'notdone':
+                        # we don't give a
+                        pass
 
             time.sleep( 2 )

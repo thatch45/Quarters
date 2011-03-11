@@ -8,6 +8,8 @@ from multiprocessing import Manager
 
 from quarters.master.spout import start_master_web
 
+from quarters.master.statuspoller import StatusPoller
+
 if __name__ == '__main__':
     manager = Manager()
     job_states = manager.dict()
@@ -17,9 +19,12 @@ if __name__ == '__main__':
     config = quarters.config.read_master('conf/master.conf')
     print( config )
 
-    # set maximum number of simultaneous chroots
     jf = JobFetcher( job_states, pending_jobs, config )
     jf.start()
+
+    # list of ips, ports of those ips
+    sp = StatusPoller( job_states, [ '0.0.0.0' ], 1338 )
+    sp.start()
 
     # get it up!
     start_master_web( job_states, pending_jobs, config['master_port'] )

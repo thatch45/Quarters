@@ -8,11 +8,12 @@ import os
 import urllib.request
 
 class StatusPoller( threading.Thread ):
-    def __init__( self, job_states, list_of_ips, port ):
+    def __init__( self, job_states, config ):
         threading.Thread.__init__( self )
         self.job_states = job_states
-        self.list_of_ips = list_of_ips
-        self.port = port
+        self.list_of_ips = config[ 'builders' ]
+        self.port = int( config[ 'builder_port' ] )
+        self.master_root = config[ 'master_root' ]
 
     def run( self ):
         while 1:
@@ -31,7 +32,7 @@ class StatusPoller( threading.Thread ):
                         self.job_states[ ujid ] = 'downloading'
 
                         # TODO: download packages and build_log
-                        root_ujid_path = os.path.join( '/var/tmp/quarters/', str(ujid) )
+                        root_ujid_path = os.path.join( self.master_root , str(ujid) )
                         os.makedirs( root_ujid_path, exist_ok=True )
 
                         baseurl = 'http://' + self.list_of_ips[0] + ':' + str(self.port) + '/' + ujid 

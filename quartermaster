@@ -23,8 +23,8 @@ if __name__ == '__main__':
     jf.start()
 
     # list of ips, ports of those ips
-    sp = StatusPoller( job_states, config[ 'builders' ], config[ 'builder_port' ] )
+    sp = StatusPoller( job_states, config )
     sp.start()
 
     # get it up!
-    start_master_web( job_states, pending_jobs, config['master_port'] )
+    start_master_web( job_states, pending_jobs, config )

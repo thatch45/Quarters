@@ -25,4 +25,4 @@ if __name__ == '__main__':
     sp.start()
 
     # get it up!
-    start_builder_web( job_states, config['builder_port'] )
+    start_builder_web( job_states, config )

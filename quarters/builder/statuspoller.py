@@ -17,19 +17,19 @@ class StatusPoller( threading.Thread ):
             print( 'master status:', cur )
             print( 'local status:', self.job_states )
             
-            for ( k, v ) in self.job_states.items():
-                if k in cur:
-                    if cur[ k ] == 'stop':
+            for ( ujid, v ) in self.job_states.items():
+                if ujid in cur:
+                    if cur[ ujid ] == 'stop':
                         # TODO: implement stop
                         # stop job k
-                        self.job_states[ k ] = 'stop'
+                        self.job_states[ ujid ] = 'stop'
                         pass
 
-                    if cur[ k ] == 'done' and v == 'done':
+                    if cur[ ujid ] == 'done' and v == 'done':
                         # remove from builder since master already synced this job
                         pass
 
-                    if cur[ k ] == 'failed' and v == 'failed':
+                    if cur[ ujid ] == 'failed' and v == 'failed':
                         # remove from builder since master already synced this job
                         pass
 

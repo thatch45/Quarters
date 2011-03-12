@@ -43,5 +43,5 @@ class Spout:
         self.application = application
 
     def start( self ):
-        self.application.listen( self.port )
+        self.application.listen( int( self.port ) )
         tornado.ioloop.IOLoop.instance().start()

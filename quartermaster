@@ -19,7 +19,7 @@ if __name__ == '__main__':
     config = quarters.config.read_config('conf/quarters.conf')
     print( config )
 
-    jf = JobFetcher( job_states, pending_jobs )
+    jf = JobFetcher( job_states, pending_jobs, config )
     jf.start()
 
     # list of ips, ports of those ips

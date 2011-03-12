@@ -17,7 +17,7 @@ class JobOverlord( threading.Thread ):
         self.processlist = []
         self.pending_jobs = Queue()
         self.job_states = job_states
-        self.chroot_base = config['chroot_base']
+        self.chroot_base = os.path.join( config['builder_root'], 'chroots' )
         self.master = config['master']
         self.master_port = config['master_port']
 

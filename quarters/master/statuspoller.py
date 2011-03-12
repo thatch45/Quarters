@@ -31,10 +31,7 @@ class StatusPoller( threading.Thread ):
                     if cur[ ujid ] == 'done' and v != 'done':
                         self.job_states[ ujid ] = 'downloading'
 
-                        # TODO: download packages and build_log
-                        root_ujid_path = os.path.join( self.master_root , str(ujid) )
-                        os.makedirs( root_ujid_path, exist_ok=True )
-
+                        # TODO: need to handle multiple builders
                         baseurl = 'http://' + self.list_of_ips[0] + ':' + str(self.port) + '/' + ujid 
                         url = baseurl + '/list_of_packages'
                         pkg_list = json.loads( get_url( url ).decode( 'utf-8' ) )
@@ -45,6 +42,10 @@ class StatusPoller( threading.Thread ):
                         # "If the URL points to a local file, or a valid
                         #  cached copy of the object exists, the object is not copied."
                         # http://docs.python.org/py3k/library/urllib.request.html#urllib.request.urlretrieve
+
+                        # download package and build_log from builder
+                        root_ujid_path = os.path.join( self.master_root , str(ujid) )
+                        os.makedirs( root_ujid_path, exist_ok=True )
                         for pkg in pkg_list:
                             url_to_dl = baseurl + '/' + pkg[ 'pkgname' ]
                             pkg_path = os.path.join( root_ujid_path, pkg[ 'pkgname' ] )
@@ -57,7 +58,7 @@ class StatusPoller( threading.Thread ):
 
                     if cur[ ujid ] == 'failed' and v != 'failed':
                         self.job_states[ ujid ] = 'downloading'
-                        # TODO: download packages and build_log
+                        # TODO: download build_log
                         self.job_states[ ujid ] = 'failed'
 
                     if cur[ ujid ] == 'inprogress':

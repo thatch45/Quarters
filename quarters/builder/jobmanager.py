@@ -28,12 +28,12 @@ class JobOverlord( threading.Thread ):
             p.start()
             self.processlist.append( p )
 
-        # add packages (FAKE it for now since we don't have a working server to test it on)
         i = 0
         while 1:
             # keep 1 job in the buffer
             if self.pending_jobs.qsize() < 1:
-                ret = get_url( 'http://' + self.master + ':' + str( self.master_port ) + '/job' ).decode( 'utf-8' )
+                new_job_url = 'http://' + self.master + ':' + str( self.master_port ) + '/job'
+                ret = get_url( new_job_url ).decode( 'utf-8' )
                 print( ret )
                 if ret != 'NOJOBS':
                     jd = JobDescription( 0, 0, 0 )
@@ -54,7 +54,7 @@ def worker( job_queue, worker_id, job_states, chroot_base ):
         # update job state here (running)
         job_states[ current_job.ujid ] = 'inprogress'
 
-        job_path = os.path.join( '/var/tmp/quarters/', str(current_job.ujid) )
+        job_path = os.path.join( config[ 'builder_root' ], str(current_job.ujid) )
         pkgsrc_path = os.path.join( job_path, current_job.package_name + '.tar.gz' )
         pkg_path = os.path.join( job_path, current_job.package_name )
         chroot_path = os.path.join( chroot_base, str( worker_id ) )

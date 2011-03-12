@@ -31,16 +31,23 @@ class JobOverlord( threading.Thread ):
         i = 0
         while 1:
             # keep 1 job in the buffer
+            time.sleep( 2 )
+
             if self.pending_jobs.qsize() < 1:
                 new_job_url = 'http://' + self.master + ':' + str( self.master_port ) + '/job'
-                ret = get_url( new_job_url ).decode( 'utf-8' )
-                print( ret )
+                
+                try:
+                    ret = get_url( new_job_url ).decode( 'utf-8' )
+                except:
+                    print( 'could not contact master' )
+                    continue
+
                 if ret != 'NOJOBS':
                     jd = JobDescription( 0, 0, 0 )
                     jd.load_json( ret )
                     self.add_job( jd )
-
-                time.sleep( 2 )
+                else:
+                    print( 'NOJOBS' )
 
     def add_job( self, job_description ):
         self.pending_jobs.put( job_description )

@@ -1,4 +1,5 @@
 import tornado.web
+import os
 
 from quarters.common_spout_interface import Spout, GlobalStatusHandler, ListOfPackagesHandler, PackageHandler, BuildLogHandler
 
@@ -9,11 +10,26 @@ class JobHandler(tornado.web.RequestHandler):
         self.pending_jobs = pending_jobs
 
     def get( self ):
+        print( 'in job handler' )
         try:
             jd = self.pending_jobs.get_nowait()
             self.write( jd.dump_json() )
         except:
             self.write( 'NOJOBS' )
+
+class PkgSrcHandler( tornado.web.RequestHandler ):
+    def initialize( self, root ):
+        self.root = root
+
+    def get( self, ujid, pkgname ):
+        print( 'in pkgsrc_handler' )
+        self.set_header('Content-Type', 'application/octet-stream')
+
+        ujid_path = os.path.join( self.root, str( ujid ) )
+        pkgsrc_path = os.path.join( ujid_path, pkgname )
+
+        with open( pkgsrc_path, 'rb' ) as fp:
+            self.write( fp.read() )
 
 def start_master_web( job_states, pending_jobs, config ):
     application = tornado.web.Application( [
@@ -22,6 +38,7 @@ def start_master_web( job_states, pending_jobs, config ):
      ( r"/([0-9]+)/list_of_packages", ListOfPackagesHandler, dict( root=config[ 'master_root' ] ) ),
      ( r"/([0-9]+)/(.*.pkg.tar.xz)", PackageHandler, dict( root=config[ 'master_root' ] ) ),
      ( r"/([0-9]+)/build_log", BuildLogHandler, dict( root=config[ 'master_root' ] ) ),
+     ( r"/([0-9]+)/(.*.tar.gz)", PkgSrcHandler, dict( root=config[ 'master_root' ] ) ),
     ] )
 
     ws = Spout( int( config[ 'master_port' ] ), application )

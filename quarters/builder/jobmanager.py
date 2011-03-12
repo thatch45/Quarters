@@ -17,7 +17,7 @@ class JobOverlord( threading.Thread ):
         self.processlist = []
         self.pending_jobs = Queue()
         self.job_states = job_states
-        self.chroot_base = os.path.join( config['builder_root'], 'chroots' )
+        self.builder_root = config['builder_root']
         self.master = config['master']
         self.master_port = config['master_port']
         self.config = config
@@ -56,18 +56,19 @@ class JobOverlord( threading.Thread ):
         self.job_states[ job_description.ujid ] = 'notdone'
 
 def worker( job_queue, worker_id, job_states, config ):
-    chroot_base = config[ 'builder_root' ]
     ''' worker where the grunt work takes place '''
+    builder_root = config['builder_root']
+    chroot_base = os.path.join( builder_root, 'chroots' )
     while 1:
         current_job = job_queue.get()
 
         # update job state here (running)
         job_states[ current_job.ujid ] = 'inprogress'
 
-        job_path = os.path.join( chroot_base, str(current_job.ujid) )
+        job_path = os.path.join( builder_root, str(current_job.ujid) )
         pkgsrc_path = os.path.join( job_path, current_job.package_name + '.tar.gz' )
         pkg_path = os.path.join( job_path, current_job.package_name )
-        chroot_path = os.path.join( chroot_base, str( worker_id ) )
+        chroot_path = os.path.join( chroot_base, 'worker' + str( worker_id ) )
 
         os.makedirs( job_path, exist_ok=True )
 

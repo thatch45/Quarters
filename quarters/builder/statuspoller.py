@@ -3,11 +3,11 @@ from quarters.utils import fetch_states
 import time
 
 class StatusPoller( threading.Thread ):
-    def __init__( self, job_states, list_of_ips, port ):
+    def __init__( self, job_states, config ):
         threading.Thread.__init__( self )
         self.job_states = job_states
-        self.list_of_ips = list_of_ips
-        self.port = port
+        self.list_of_ips = [ config[ 'master' ] ]
+        self.port = config[ 'master_port' ]
 
     def run( self ):
         while 1:

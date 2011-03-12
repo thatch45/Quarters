@@ -20,11 +20,12 @@ class JobOverlord( threading.Thread ):
         self.chroot_base = os.path.join( config['builder_root'], 'chroots' )
         self.master = config['master']
         self.master_port = config['master_port']
+        self.config = config
 
     def run( self ):
         # start all the workers
         for worker_id in range( self.max_jobs ):
-            p = Process( target=worker, args=( self.pending_jobs, worker_id, self.job_states, self.chroot_base ) )
+            p = Process( target=worker, args=( self.pending_jobs, worker_id, self.job_states, self.config ) )
             p.start()
             self.processlist.append( p )
 
@@ -46,6 +47,7 @@ class JobOverlord( threading.Thread ):
                     jd = JobDescription( 0, 0, 0 )
                     jd.load_json( ret )
                     self.add_job( jd )
+                    print( 'added', ret )
                 else:
                     print( 'NOJOBS' )
 
@@ -53,7 +55,8 @@ class JobOverlord( threading.Thread ):
         self.pending_jobs.put( job_description )
         self.job_states[ job_description.ujid ] = 'notdone'
 
-def worker( job_queue, worker_id, job_states, chroot_base ):
+def worker( job_queue, worker_id, job_states, config ):
+    chroot_base = config[ 'builder_root' ]
     ''' worker where the grunt work takes place '''
     while 1:
         current_job = job_queue.get()
@@ -61,7 +64,7 @@ def worker( job_queue, worker_id, job_states, chroot_base ):
         # update job state here (running)
         job_states[ current_job.ujid ] = 'inprogress'
 
-        job_path = os.path.join( config[ 'builder_root' ], str(current_job.ujid) )
+        job_path = os.path.join( chroot_base, str(current_job.ujid) )
         pkgsrc_path = os.path.join( job_path, current_job.package_name + '.tar.gz' )
         pkg_path = os.path.join( job_path, current_job.package_name )
         chroot_path = os.path.join( chroot_base, str( worker_id ) )

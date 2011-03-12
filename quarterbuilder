@@ -8,7 +8,7 @@ from multiprocessing import Manager
 
 from quarters.builder.spout import start_builder_web
 
-from quarters.master.statuspoller import StatusPoller
+from quarters.builder.statuspoller import StatusPoller
 
 if __name__ == '__main__':
     manager = Manager()
@@ -21,7 +21,7 @@ if __name__ == '__main__':
     jo.start()
 
     # keep master as list to reuse fetch status
-    sp = StatusPoller( job_states, [ config[ 'master' ] ], config[ 'master_port' ] )
+    sp = StatusPoller( job_states, config )
     sp.start()
 
     # get it up!

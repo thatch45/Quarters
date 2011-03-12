@@ -34,8 +34,8 @@ class JobFetcher( threading.Thread ):
                 os.makedirs( job_path, exist_ok=True )
                 urllib.request.urlretrieve( remote_url, pkgsrc_path )
 
-                # job description: ujid, pkgname, pkgsrc
-                jd = JobDescription( str( new_ujid ), pkgname, pkgurl )
+                # job description: ujid, pkgname, pkgsrc, sha256sum of srcpkg, architecture to build (x86_64,i686,any)
+                jd = JobDescription( str( new_ujid ), pkgname, pkgurl, 'sha256sumgoeshere', 'x86_64' )
                 self.add_job( jd )
 
                 time.sleep( 10 )

@@ -44,7 +44,7 @@ class JobOverlord( threading.Thread ):
                     continue
 
                 if ret != 'NOJOBS':
-                    jd = JobDescription( 0, 0, 0 )
+                    jd = JobDescription( 0, 0, 0, 'emptysum', 'emptyarch' )
                     jd.load_json( ret )
                     self.add_job( jd )
                     print( 'added', ret )

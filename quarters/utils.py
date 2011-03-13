@@ -82,6 +82,6 @@ def fetch_states( list_of_ips, port ):
 
         status = json.loads( json_data.decode('utf-8' ) )
 
-        ret.update( status )
+        ret.update( { ip : status } )
 
     return ret

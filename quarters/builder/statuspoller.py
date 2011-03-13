@@ -16,6 +16,8 @@ class StatusPoller( threading.Thread ):
         while 1:
             # cur is the status on master
             cur = fetch_states( self.list_of_ips, self.port )
+            # there is only 1 ip (master) on the builder status poller
+            cur = cur[ self.list_of_ips[0] ]
 
             print( 'master status:', cur )
             print( 'local status:', self.job_states )

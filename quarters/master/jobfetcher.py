@@ -25,7 +25,7 @@ class JobFetcher( threading.Thread ):
         while 1:
             time.sleep( 10 )
 
-            # keep 1 job in the buffer
+            # keep 2 jobs in the buffer
             if self.pending_jobs.qsize() < 2:
                 
                 temp = urllib.request.urlopen( 'http://aur.archlinux.org/rss.php' ).read().decode( 'ascii' ).split('\n')[16].split('>')[1].split('<')[0]
@@ -35,7 +35,6 @@ class JobFetcher( threading.Thread ):
                 pkgname = temp
                 pkgurl = 'http://' + self.master + ':' + str( self.master_port ) + '/' + str( new_ujid ) + '/' + pkgname + '.tar.gz'
 
-                # TODO make package sources available only through master
                 job_path = os.path.join( self.master_root, str( new_ujid ) )
                 pkgsrc_path = os.path.join( job_path, pkgname + '.tar.gz' )
                 remote_url = 'https://aur.archlinux.org/packages/' + pkgname + '/' + pkgname + '.tar.gz'
@@ -47,7 +46,6 @@ class JobFetcher( threading.Thread ):
                 self.add_job( jd )
 
                 new_ujid += 1
-            # do check ups here on package status on builders
 
     def add_job( self, job_description ):
         self.pending_jobs.put( job_description )

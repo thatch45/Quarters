@@ -34,7 +34,7 @@ class StatusPoller( threading.Thread ):
                             self.job_states[ ujid ] = 'downloading'
 
                             # TODO: need to handle multiple builders
-                            baseurl = 'http://' + self.list_of_ips[0] + ':' + str(self.port) + '/' + ujid 
+                            baseurl = 'http://' + ip + ':' + str(self.port) + '/' + ujid 
                             url = baseurl + '/list_of_packages'
                             pkg_list = json.loads( get_url( url ).decode( 'utf-8' ) )
 

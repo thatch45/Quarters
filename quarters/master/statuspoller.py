@@ -23,7 +23,7 @@ class StatusPoller( threading.Thread ):
             print( 'remote status:', raw_stat )
             print( 'local status:', self.job_states )
 
-            for ( ip, state ) in raw_stat:
+            for ( ip, cur ) in raw_stat.items():
                 for ( ujid, v ) in self.job_states.items():
                     # skip values that are finalized
                     if v in ( 'done', 'failed' ):

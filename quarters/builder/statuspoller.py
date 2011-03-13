@@ -32,14 +32,16 @@ class StatusPoller( threading.Thread ):
                     if cur[ ujid ] == 'done' and v == 'done':
                         # remove from builder since master already synced this job
                         rm_path = os.path.join( self.builder_root, ujid )
-                        shutil.rmtree( rm_path )
+                        # TODO: find out why this is getting deleted early
+                        #shutil.rmtree( rm_path )
                         # remove the key from the builder status since it is done
                         del self.job_states[ ujid ]
 
                     if cur[ ujid ] == 'failed' and v == 'failed':
                         # remove from builder since master already synced this job
                         rm_path = os.path.join( self.builder_root, ujid )
-                        shutil.rmtree( rm_path )
+                        # TODO: find out why this is getting deleted early
+                        #shutil.rmtree( rm_path )
                         # remove the key from the builder status since it is done
                         del self.job_states[ ujid ]
 

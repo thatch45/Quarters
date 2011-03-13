@@ -20,7 +20,7 @@ class StatusPoller( threading.Thread ):
             # { ip : { ujid : status, ... }, ... }
             raw_stat = fetch_states( self.list_of_ips, self.port )
 
-            print( 'remote status:', cur )
+            print( 'remote status:', raw_stat )
             print( 'local status:', self.job_states )
 
             for ( ip, state ) in raw_stat:

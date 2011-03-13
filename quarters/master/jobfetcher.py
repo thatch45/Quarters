@@ -27,7 +27,6 @@ class JobFetcher( threading.Thread ):
                 pkgname = 'libuser'
                 pkgurl = 'http://' + self.master + ':' + str( self.master_port ) + '/' + str( new_ujid ) + '/' + pkgname + '.tar.gz'
 
-                # TODO make package sources available only through master
                 job_path = os.path.join( self.master_root, str( new_ujid ) )
                 pkgsrc_path = os.path.join( job_path, pkgname + '.tar.gz' )
                 remote_url = 'https://aur.archlinux.org/packages/libuser/libuser.tar.gz'

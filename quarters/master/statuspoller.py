@@ -33,7 +33,6 @@ class StatusPoller( threading.Thread ):
                         if cur[ ujid ] == 'done' and v != 'done':
                             self.job_states[ ujid ] = 'downloading'
 
-                            # TODO: need to handle multiple builders
                             baseurl = 'http://' + ip + ':' + str(self.port) + '/' + ujid 
                             url = baseurl + '/list_of_packages'
                             pkg_list = json.loads( get_url( url ).decode( 'utf-8' ) )
@@ -60,7 +59,7 @@ class StatusPoller( threading.Thread ):
 
                         if cur[ ujid ] == 'failed' and v != 'failed':
                             self.job_states[ ujid ] = 'downloading'
-                            # TODO: download build_log
+                            # TODO: download build log here
                             self.job_states[ ujid ] = 'failed'
 
                         if cur[ ujid ] == 'inprogress':

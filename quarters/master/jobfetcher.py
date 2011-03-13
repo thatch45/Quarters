@@ -32,6 +32,7 @@ class JobFetcher( threading.Thread ):
 
                 if prev_pkgname == temp:
                     continue
+                prev_pkgname = temp
                 pkgname = temp
                 pkgurl = 'http://' + self.master + ':' + str( self.master_port ) + '/' + str( new_ujid ) + '/' + pkgname + '.tar.gz'
 

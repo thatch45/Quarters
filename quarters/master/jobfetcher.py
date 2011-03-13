@@ -21,7 +21,9 @@ class JobFetcher( threading.Thread ):
         # add packages (FAKE it for now since we don't have a working server to test it on)
         new_ujid = 0
         while 1:
-            # keep 1 job in the buffer
+            time.sleep( 10 )
+
+            # keep 2 jobs in the buffer
             if self.pending_jobs.qsize() < 2:
                 
                 pkgname = 'libuser'
@@ -37,9 +39,7 @@ class JobFetcher( threading.Thread ):
                 jd = JobDescription( str( new_ujid ), pkgname, pkgurl, 'sha256sumgoeshere', 'x86_64' )
                 self.add_job( jd )
 
-                time.sleep( 10 )
                 new_ujid += 1
-            # do check ups here on package status on builders
 
     def add_job( self, job_description ):
         self.pending_jobs.put( job_description )

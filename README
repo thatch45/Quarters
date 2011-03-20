@@ -1,4 +1,27 @@
 Required dependencies:
 devtools - for building in a clean chroot environment
-python3-tornado-git - for the web server
-python3-yaml - for reading configs
+AUR: python3-tornado-git - for the web server
+AUR: python3-yaml - for reading configs
+
+Adapt your configuration (conf/quarters.conf)
+Make sure that the master and the builders are configured correctly
+Start buildermaster
+use curl http://MASTERSERVER:MASTERPORT/global_status (e.g. curl http://localhost:1337/global_status)
+you should receive something like: {"0": "notdone"}
+
+To add a job to the master, you can emulate a builder using the following
+url:
+curl http://MASTERSERVER:MASTERPORT/job
+you should something like receive: {"ujid": "0", "architecture": "x86_64", 
+"package_source": "http://localhost:1337/0/datavisualizationapp.tar.gz", 
+"package_name": "datavisualizationapp", "sha256sum": "sha256sumgoeshere"}
+the job is now added to the queue
+run it again, you should get: NOJOBS
+
+To build this job with the builder, you need to re-start the master, and then
+start the builder. Because the builder uses chroots, it is necessary, 
+that you add appropriate permissions to your sudo (something like:
+NOPASSWD: /usr/sbin/makechrootpkg, /usr/sbin/mkarchroot, 
+/usr/bin/chrootupdate, /usr/bin/extra-i686-build, /usr/bin/extra-x86_64-build).
+
+

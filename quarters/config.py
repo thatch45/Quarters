@@ -11,7 +11,7 @@ def read_config( filename ):
         sys.stderr.write(err + '\n')
         sys.exit(2)
     builder = {
-              'builders': [],
+               'builders': [],
                'master': '',
                'chroots': 1,
                'listen': '0.0.0.0',
@@ -19,10 +19,10 @@ def read_config( filename ):
                'https_root': '/var/cache/quarters/https',
                'pemfile': '/etc/quarters/quarters.pem',
                'disable_https': '',
-              'svn': [],
-              'svn_root': '/var/cache/quarters/svn',
-              'git_root': '/var/cache/quarters/git',
-              'pacman_root': '/var/cache/quarters/pacman_root',
+               'svn': [],
+               'svn_root': '/var/cache/quarters/svn',
+               'git_root': '/var/cache/quarters/git',
+               'pacman_root': '/var/cache/quarters/pacman_root',
               }
     
     conf = yaml.load(open(filename, 'r'))

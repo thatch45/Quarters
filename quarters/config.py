@@ -6,10 +6,6 @@ def read_config( filename ):
     '''
     robust config reader
     '''
-    if not os.path.isfile(filename):
-        err = 'The configuration file ' + filename + ' does not exist.'
-        sys.stderr.write(err + '\n')
-        sys.exit(2)
     builder = {
                'builders': [],
                'master': '',
@@ -25,7 +21,10 @@ def read_config( filename ):
                'pacman_root': '/var/cache/quarters/pacman_root',
               }
     
-    conf = yaml.load(open(filename, 'r'))
+    with open( filename ) as file:
+        conf = yaml.load( file )
+
     if conf:
         builder.update(conf)
+
     return builder

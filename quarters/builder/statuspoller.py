@@ -1,26 +1,19 @@
 import threading
-from quarters.utils import fetch_states
 import time
 import shutil
 import os
+from quarters.protocol import master_state
 
 class StatusPoller( threading.Thread ):
     def __init__( self, job_states, config ):
         threading.Thread.__init__( self )
         self.job_states = job_states
-        self.list_of_ips = [ config[ 'master' ] ]
-        self.port = config[ 'master_port' ]
+        self.config = config
         self.builder_root = config[ 'builder_root' ]
 
     def run( self ):
         while 1:
-            # cur is the status on master
-            cur = fetch_states( self.list_of_ips, self.port )
-            # there is only 1 ip (master) on the builder status poller
-            try:
-                cur = cur[ self.list_of_ips[0] ]
-            except KeyError:
-                cur = {}
+            cur = master_state( self.config )
 
             print( 'master status:', cur )
             print( 'local status:', self.job_states )

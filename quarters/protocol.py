@@ -1,40 +1,61 @@
 ''' file resereved for the communications of master and builder '''
 
 import bz2
+from quarters.utils import fetch_states
 
+# TODO start using this decorator
 def quarters_compress( f ):
     ''' decorator to compress argument '''
     return lambda x: f( bz2.compress( x ) )
 
+# TODO start using this decorator
 def quarters_decompress( f ):
     ''' decorator to decompress argument '''
     return lambda x: f( bz2.decompress( x ) )
 
-def master_url():
+def foreign_url( ip, port ):
     '''
     Retrive the master url from the configuration
     '''
-    pass
+    return 'http://' + ip + ':' + str( port )
 
-def master_state():
+def master_state( config ):
     '''
     Download the master state file and translate the data to a structure
     '''
-    pass
+    ret = {}
 
-def build_pkgs():
-    '''
-    Download the build_pkgs from the master
-    '''
-    pass
+    url = foreign_url( config[ 'master' ], config[ 'master_port' ] ) + '/global_status'
 
-def builder_states(builders):
+    try:
+        json_data = get_url( url )
+        status = json.loads( json_data.decode('utf-8' ) )
+        ret.update( status )
+    except:
+        print( 'failed to retrieve master state' )
+
+    return ret
+
+def builder_states( config ):
     '''
     Retrieve the state of the builders
     '''
-    for builder in builders:
-        url = 'http://' + builder['url'] + '/builder_state.qjz'
+    ret = {}
+
+    for ip in config[ 'builders' ]:
+        url = foreign_url( ip, config[ 'builder_port' ] ) + '/global_status'
+
         try:
-            fn_ = urllib.request.urlretrieve(url)[0]
+            json_data = get_url( url )
         except:
-            pass
+           continue
+
+        status = json.loads( json_data.decode('utf-8' ) )
+
+        ret.update( { ip : status } )
+
+    return ret
+
+def get_url( url ):
+    ''' returns the contents at the url '''
+    return urllib.request.urlopen( url ).read()

@@ -1,7 +1,6 @@
 import threading
 import quarters.utils
-from quarters.utils import fetch_states
-from quarters.utils import get_url
+from quarters.protocol import builder_states, get_url
 import time
 import json
 import os
@@ -11,6 +10,7 @@ class StatusPoller( threading.Thread ):
     def __init__( self, job_states, config ):
         threading.Thread.__init__( self )
         self.job_states = job_states
+        self.config = config
         self.list_of_ips = config[ 'builders' ]
         self.port = int( config[ 'builder_port' ] )
         self.master_root = config[ 'master_root' ]
@@ -18,7 +18,7 @@ class StatusPoller( threading.Thread ):
     def run( self ):
         while 1:
             # { ip : { ujid : status, ... }, ... }
-            raw_stat = fetch_states( self.list_of_ips, self.port )
+            raw_stat = builder_states( self.config )
 
             print( 'remote status:', raw_stat )
             print( 'local status:', self.job_states )

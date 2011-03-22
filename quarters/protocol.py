@@ -7,9 +7,42 @@ def quarters_compress( f ):
     def helper( x ):
         f( bz2.compress( x ) )
     return helper
+    # TODO check if bottom return works, more specifically, if you can return lambda functions
+    #return lambda x: f( bz2.compress( x ) )
 
 def quarters_decompress( f ):
     ''' decorator to decompress argument '''
     def helper( x ):
         f( bz2.decompress( x ) )
     return helper
+    # TODO check if bottom return works, more specifically, if you can return lambda functions
+    #return lambda x: f( bz2.decompress( x ) )
+
+def master_url():
+    '''
+    Retrive the master url from the configuration
+    '''
+    pass
+
+def master_state():
+    '''
+    Download the master state file and translate the data to a structure
+    '''
+    pass
+
+def build_pkgs():
+    '''
+    Download the build_pkgs from the master
+    '''
+    pass
+
+def builder_states(builders):
+    '''
+    Retrieve the state of the builders
+    '''
+    for builder in builders:
+        url = 'http://' + builder['url'] + '/builder_state.qjz'
+        try:
+            fn_ = urllib.request.urlretrieve(url)[0]
+        except:
+            pass

@@ -4,19 +4,11 @@ import bz2
 
 def quarters_compress( f ):
     ''' decorator to compress argument '''
-    def helper( x ):
-        f( bz2.compress( x ) )
-    return helper
-    # TODO check if bottom return works, more specifically, if you can return lambda functions
-    #return lambda x: f( bz2.compress( x ) )
+    return lambda x: f( bz2.compress( x ) )
 
 def quarters_decompress( f ):
     ''' decorator to decompress argument '''
-    def helper( x ):
-        f( bz2.decompress( x ) )
-    return helper
-    # TODO check if bottom return works, more specifically, if you can return lambda functions
-    #return lambda x: f( bz2.decompress( x ) )
+    return lambda x: f( bz2.decompress( x ) )
 
 def master_url():
     '''

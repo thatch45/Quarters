@@ -16,8 +16,8 @@ class StatusPoller( threading.Thread ):
             # { ip : { ujid : status, ... }, ... }
             b_states = builder_states( self.config )
 
-            print( 'remote status:', b_states )
-            print( 'local status:', self.job_states )
+            print( 'builder states:', b_states )
+            print( 'local (master) state:', self.job_states )
 
             for ( ip, cur ) in b_states.items():
                 for ( ujid, v ) in self.job_states.items():

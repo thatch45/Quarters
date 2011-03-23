@@ -2,6 +2,8 @@
 
 import bz2
 from quarters.utils import fetch_states
+import json
+import urllib.request
 
 # TODO start using this decorator
 def quarters_compress( f ):
@@ -59,3 +61,8 @@ def builder_states( config ):
 def get_url( url ):
     ''' returns the contents at the url '''
     return urllib.request.urlopen( url ).read()
+
+def get_package_list( ip, port, ujid ):
+    ''' gets a dictionary representing the object at http://ip:port/ujid/list_of_packages '''
+    url = foreign_url( ip, port ) + '/' + ujid + '/list_of_packages'
+    return json.loads( get_url( url ).decode( 'utf-8' ) )

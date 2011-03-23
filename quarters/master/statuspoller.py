@@ -1,8 +1,7 @@
 import threading
 import quarters.utils
-from quarters.protocol import builder_states, get_url
+from quarters.protocol import builder_states, get_package_list
 import time
-import json
 import os
 import urllib.request
 
@@ -34,8 +33,8 @@ class StatusPoller( threading.Thread ):
                             self.job_states[ ujid ] = 'downloading'
 
                             baseurl = 'http://' + ip + ':' + str(self.port) + '/' + ujid 
-                            url = baseurl + '/list_of_packages'
-                            pkg_list = json.loads( get_url( url ).decode( 'utf-8' ) )
+
+                            pkg_list = get_package_list( ip, self.port, ujid )
 
                             # TODO: implement when we start using https
                             # need to make sure that urlretrieve overwrites

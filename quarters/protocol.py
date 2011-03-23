@@ -77,7 +77,7 @@ def get_packages( ip, ujid, config ):
     # http://docs.python.org/py3k/library/urllib.request.html#urllib.request.urlretrieve
     pkg_list = get_package_list( ip, ujid, config )
     port = int( config[ 'builder_port' ] )
-    baseurl = 'http://' + ip + ':' + str(self.port) + '/' + ujid 
+    baseurl = 'http://' + ip + ':' + str(port) + '/' + ujid 
     root_ujid_path = os.path.join( config[ 'master_root' ], str(ujid) )
     os.makedirs( root_ujid_path, exist_ok=True )
     for pkg in pkg_list:
@@ -87,7 +87,7 @@ def get_packages( ip, ujid, config ):
     
 def get_build_log( ip, ujid, config ):
     port = int( config[ 'builder_port' ] )
-    baseurl = 'http://' + ip + ':' + str(self.port) + '/' + ujid 
+    baseurl = 'http://' + ip + ':' + str(port) + '/' + ujid 
     root_ujid_path = os.path.join( config[ 'master_root' ], str(ujid) )
     os.makedirs( root_ujid_path, exist_ok=True )
     build_log_url = baseurl + '/build_log'

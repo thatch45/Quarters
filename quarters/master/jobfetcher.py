@@ -9,13 +9,11 @@ class JobFetcher( threading.Thread ):
         threading.Thread.__init__( self )
         self.pending_jobs = pending_jobs
         self.job_states = job_states
-        self.master = config[ 'master' ]
-        self.master_port = config[ 'master_port' ]
-        self.master_root = config[ 'master_root' ]
+        self.config = config
 
     def run( self ):
         ''' iterator over all scms to fetch new jobs '''
-        ar = AURRSS()
+        ar = AURRSS( self.config )
 
         while 1:
             # keep 2 jobs in the buffer

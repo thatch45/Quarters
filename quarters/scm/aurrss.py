@@ -5,8 +5,12 @@ import urllib.request
 
 class AURRSS:
     ''' an scm that fetches new jobs based on new entries from the aur rss feed '''
-    def __init__( self ):
+    def __init__( self, config ):
         self.prev_pkgname = ''
+        self.config = config
+        self.master = config[ 'master' ]
+        self.master_port = config[ 'master_port' ]
+        self.master_root = config[ 'master_root' ]
 
     def get_jobs( self ):
         ''' returns a list of new jobdescriptions '''

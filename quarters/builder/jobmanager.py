@@ -84,9 +84,9 @@ def worker( job_queue, worker_id, job_states, config ):
 
         # chroot
         if current_job.architecture == 'i686':
-            chroot_cmd = [ '/usr/bin/extra-i686-build', '-r', chroot_path ]
+            chroot_cmd = [ 'sudo /usr/bin/extra-i686-build', '-r', chroot_path ]
         else:
-            chroot_cmd = [ '/usr/bin/extra-x86_64-build', '-r', chroot_path ]
+            chroot_cmd = [ 'sudo /usr/bin/extra-x86_64-build', '-r', chroot_path ]
 
         with subprocess.Popen( chroot_cmd, cwd=pkg_path, stdout=subprocess.PIPE, stderr=subprocess.STDOUT) as proc:
             log_path = os.path.join( job_path, 'build_log' )

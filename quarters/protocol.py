@@ -62,7 +62,34 @@ def get_url( url ):
     ''' returns the contents at the url '''
     return urllib.request.urlopen( url ).read()
 
-def get_package_list( ip, port, ujid ):
+def get_package_list( ip, ujid, config ):
     ''' gets a dictionary representing the object at http://ip:port/ujid/list_of_packages '''
+    port = int( config[ 'builder_port' ] )
     url = foreign_url( ip, port ) + '/' + ujid + '/list_of_packages'
     return json.loads( get_url( url ).decode( 'utf-8' ) )
+
+def get_packages( ip, ujid, config ):
+    # TODO: implement when we start using https
+    # need to make sure that urlretrieve overwrites
+    #  if existing file with same name is found
+    # "If the URL points to a local file, or a valid
+    #  cached copy of the object exists, the object is not copied."
+    # http://docs.python.org/py3k/library/urllib.request.html#urllib.request.urlretrieve
+    pkg_list = get_package_list( ip, ujid, config )
+    port = int( config[ 'builder_port' ] )
+    baseurl = 'http://' + ip + ':' + str(self.port) + '/' + ujid 
+    root_ujid_path = os.path.join( config[ 'master_root' ], str(ujid) )
+    os.makedirs( root_ujid_path, exist_ok=True )
+    for pkg in pkg_list:
+        url_to_dl = baseurl + '/' + pkg[ 'pkgname' ]
+        pkg_path = os.path.join( root_ujid_path, pkg[ 'pkgname' ] )
+        urllib.request.urlretrieve( url_to_dl, pkg_path )
+    
+def get_build_log( ip, ujid, config ):
+    port = int( config[ 'builder_port' ] )
+    baseurl = 'http://' + ip + ':' + str(self.port) + '/' + ujid 
+    root_ujid_path = os.path.join( config[ 'master_root' ], str(ujid) )
+    os.makedirs( root_ujid_path, exist_ok=True )
+    build_log_url = baseurl + '/build_log'
+    build_log_path = os.path.join( root_ujid_path, 'build_log' )
+    urllib.request.urlretrieve( build_log_url, build_log_path )

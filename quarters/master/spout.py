@@ -41,5 +41,5 @@ def start_master_web( job_states, pending_jobs, config ):
      ( r"/([0-9]+)/(.*.tar.gz)", PkgSrcHandler, dict( root=config[ 'master_root' ] ) ),
     ] )
 
-    ws = Spout( int( config[ 'master_port' ] ), application )
+    ws = Spout( config[ 'master_port' ], application )
     ws.start()

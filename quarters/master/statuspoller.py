@@ -12,17 +12,16 @@ class StatusPoller( threading.Thread ):
         self.config = config
         self.list_of_ips = config[ 'builders' ]
         self.port = int( config[ 'builder_port' ] )
-        self.master_root = config[ 'master_root' ]
 
     def run( self ):
         while 1:
             # { ip : { ujid : status, ... }, ... }
-            raw_stat = builder_states( self.config )
+            b_states = builder_states( self.config )
 
-            print( 'remote status:', raw_stat )
+            print( 'remote status:', b_states )
             print( 'local status:', self.job_states )
 
-            for ( ip, cur ) in raw_stat.items():
+            for ( ip, cur ) in b_states.items():
                 for ( ujid, v ) in self.job_states.items():
                     # skip values that are finalized
                     if v in ( 'done', 'failed' ):
@@ -31,29 +30,9 @@ class StatusPoller( threading.Thread ):
                     if ujid in cur:
                         if cur[ ujid ] == 'done' and v != 'done':
                             self.job_states[ ujid ] = 'downloading'
-
-                            baseurl = 'http://' + ip + ':' + str(self.port) + '/' + ujid 
-
-                            pkg_list = get_package_list( ip, self.port, ujid )
-
-                            # TODO: implement when we start using https
-                            # need to make sure that urlretrieve overwrites
-                            #  if existing file with same name is found
-                            # "If the URL points to a local file, or a valid
-                            #  cached copy of the object exists, the object is not copied."
-                            # http://docs.python.org/py3k/library/urllib.request.html#urllib.request.urlretrieve
-
                             # download package and build_log from builder
-                            root_ujid_path = os.path.join( self.master_root , str(ujid) )
-                            os.makedirs( root_ujid_path, exist_ok=True )
-                            for pkg in pkg_list:
-                                url_to_dl = baseurl + '/' + pkg[ 'pkgname' ]
-                                pkg_path = os.path.join( root_ujid_path, pkg[ 'pkgname' ] )
-                                urllib.request.urlretrieve( url_to_dl, pkg_path )
-                            build_log_url = baseurl + '/build_log'
-                            build_log_path = os.path.join( root_ujid_path, 'build_log' )
-                            urllib.request.urlretrieve( build_log_url, build_log_path )
-
+                            get_packages( ip, ujid, pkg_list, self.config )
+                            get_build_log( ip, ujid, self.config )
                             self.job_states[ ujid ] = 'done'
 
                         if cur[ ujid ] == 'failed' and v != 'failed':

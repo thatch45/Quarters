@@ -21,10 +21,7 @@ class JobDescription:
 
         return json.dumps( d )
 
+    @staticmethod
     def load_json( self, json_string ):
         d = json.loads( json_string )
-        self.ujid = d['ujid']
-        self.package_name = d['package_name']
-        self.package_source = d['package_source']
-        self.sha256sum = d['sha256sum']
-        self.architecture = d['architecture']
+        return JobDescription( d['ujid'], d['package_name'], d['package_source'], d['sha256sum'], d['architecture'] )

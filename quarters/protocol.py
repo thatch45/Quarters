@@ -93,3 +93,48 @@ def get_build_log( ip, ujid, config ):
     build_log_url = baseurl + '/build_log'
     build_log_path = os.path.join( root_ujid_path, 'build_log' )
     urllib.request.urlretrieve( build_log_url, build_log_path )
+
+def response_global_status( job_states ):
+    # we need to wrap in a dict because job_states is a dict proxy
+    return json.dumps( dict( job_states ) )
+
+def response_list_of_packages( root, ujid ):
+    ujid_path = os.path.join( root, str( ujid ) )
+    results = glob.glob( ujid_path + '/*.pkg.tar.xz' )
+    results = list( map( lambda x: x.split('/')[-1], results ) )
+    temp = [{ 'pkgname' : i, 'sha256sum' : sha256sum_file( ujid_path + '/' + i ) } for i in results]
+    return json.dumps( temp )
+
+def response_package( root, ujid, pkg ):
+    ujid_path = os.path.join( root, str( ujid ) )
+    pkgul = ujid_path + '/' + str( pkg )
+    content = 'blah'
+    with open( pkgul, 'rb' ) as fp:
+        content = fp.read()
+    return content
+
+def response_build_log( root, ujid ):
+    ujid_path = os.path.join( root, str( ujid ) )
+    build_log_path = ujid_path + '/build_log'
+    content = 'blah'
+    with open( build_log_path, 'rb' ) as fp:
+        content = fp.read()
+    return content
+
+def response_job( pending_jobs ):
+    ret = ''
+    try:
+        jd = pending_jobs.get_nowait()
+        ret = jd.dump_json()
+    except:
+        ret = 'NOJOBS'
+    return ret
+
+def response_pkgsrc( root, ujid, pkgname ):
+    content = ''
+    ujid_path = os.path.join( root, str( ujid ) )
+    pkgsrc_path = os.path.join( ujid_path, pkgname )
+
+    with open( pkgsrc_path, 'rb' ) as fp:
+        content = fp.read()
+    return content

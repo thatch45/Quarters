@@ -4,6 +4,7 @@ import json
 import glob
 from quarters.utils import sha256sum_file
 import os
+from quarters.protocol import response_global_status, response_list_of_packages, response_package, response_build_log
 
 class GlobalStatusHandler(tornado.web.RequestHandler):
     ''' handles /global_status '''
@@ -12,40 +13,30 @@ class GlobalStatusHandler(tornado.web.RequestHandler):
         self.job_states = job_states
 
     def get( self ):
-        self.write( json.dumps( dict(self.job_states) ) )
+        self.write( response_global_status( self.job_states ) )
 
 class ListOfPackagesHandler(tornado.web.RequestHandler):
     def initialize( self, root ):
         self.root = root
 
     def get( self, ujid ):
-        ujid_path = os.path.join( self.root, str( ujid ) )
-        results = glob.glob( ujid_path + '/*.pkg.tar.xz' )
-        results = list( map( lambda x: x.split('/')[-1], results ) )
-        temp = [{ 'pkgname' : i, 'sha256sum' : sha256sum_file( ujid_path + '/' + i ) } for i in results]
-        self.write( json.dumps( temp ) )
+        self.write( response_list_of_packages( self.root, ujid ) )
 
 class PackageHandler(tornado.web.RequestHandler):
     def initialize( self, root ):
         self.root = root
 
     def get( self, ujid, pkg ):
-        ujid_path = os.path.join( self.root, str( ujid ) )
         self.set_header('Content-Type', 'application/octet-stream')
-        pkgul = ujid_path + '/' + str( pkg )
-        with open( pkgul, 'rb' ) as fp:
-            self.write( fp.read() )
+        self.write( response_package( self.root, ujid, pkg ) )
 
 class BuildLogHandler(tornado.web.RequestHandler):
     def initialize( self, root ):
         self.root = root
 
     def get( self, ujid ):
-        ujid_path = os.path.join( self.root, str( ujid ) )
         self.set_header('Content-Type', 'text/plain')
-        build_log_path = ujid_path + '/build_log'
-        with open( build_log_path, 'rb' ) as fp:
-            self.write( fp.read() )
+        self.write( response_build_log( self.root, ujid ) )
 
 class Spout:
     ''' webserver '''

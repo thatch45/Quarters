@@ -3,6 +3,8 @@ import os
 
 from quarters.common_spout_interface import Spout, GlobalStatusHandler, ListOfPackagesHandler, PackageHandler, BuildLogHandler
 
+from quarters.protocol import response_job, response_pkgsrc
+
 class JobHandler(tornado.web.RequestHandler):
     ''' handles /job '''
 
@@ -10,26 +12,15 @@ class JobHandler(tornado.web.RequestHandler):
         self.pending_jobs = pending_jobs
 
     def get( self ):
-        print( 'in job handler' )
-        try:
-            jd = self.pending_jobs.get_nowait()
-            self.write( jd.dump_json() )
-        except:
-            self.write( 'NOJOBS' )
+        self.write( response_job( self.pending_jobs ) )
 
 class PkgSrcHandler( tornado.web.RequestHandler ):
     def initialize( self, root ):
         self.root = root
 
     def get( self, ujid, pkgname ):
-        print( 'in pkgsrc_handler' )
         self.set_header('Content-Type', 'application/octet-stream')
-
-        ujid_path = os.path.join( self.root, str( ujid ) )
-        pkgsrc_path = os.path.join( ujid_path, pkgname )
-
-        with open( pkgsrc_path, 'rb' ) as fp:
-            self.write( fp.read() )
+        self.write( response_pkgsrc( self.root, ujid, pkgname ) )
 
 def start_master_web( job_states, pending_jobs, config ):
     application = tornado.web.Application( [

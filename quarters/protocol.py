@@ -8,12 +8,12 @@ import os
 # TODO start using this decorator
 def quarters_compress( f ):
     ''' decorator to compress argument '''
-    return lambda x: f( bz2.compress( x ) )
+    return lambda x: bz2.compress( f( x ) )
 
 # TODO start using this decorator
 def quarters_decompress( f ):
     ''' decorator to decompress argument '''
-    return lambda x: f( bz2.decompress( x ) )
+    return lambda x: bz2.decompress( f( x ) )
 
 def foreign_url( ip, port ):
     '''

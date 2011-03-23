@@ -10,8 +10,6 @@ class StatusPoller( threading.Thread ):
         threading.Thread.__init__( self )
         self.job_states = job_states
         self.config = config
-        self.list_of_ips = config[ 'builders' ]
-        self.port = int( config[ 'builder_port' ] )
 
     def run( self ):
         while 1:
@@ -30,14 +28,13 @@ class StatusPoller( threading.Thread ):
                     if ujid in cur:
                         if cur[ ujid ] == 'done' and v != 'done':
                             self.job_states[ ujid ] = 'downloading'
-                            # download package and build_log from builder
                             get_packages( ip, ujid, pkg_list, self.config )
                             get_build_log( ip, ujid, self.config )
                             self.job_states[ ujid ] = 'done'
 
                         if cur[ ujid ] == 'failed' and v != 'failed':
                             self.job_states[ ujid ] = 'downloading'
-                            # TODO: download build log here
+                            get_build_log( ip, ujid, self.config )
                             self.job_states[ ujid ] = 'failed'
 
                         if cur[ ujid ] == 'inprogress':

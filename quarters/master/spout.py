@@ -38,7 +38,7 @@ def start_master_web( job_states, pending_jobs, config ):
      ( r"/([0-9]+)/list_of_packages", ListOfPackagesHandler, dict( root=config[ 'master_root' ] ) ),
      ( r"/([0-9]+)/(.*.pkg.tar.xz)", PackageHandler, dict( root=config[ 'master_root' ] ) ),
      ( r"/([0-9]+)/build_log", BuildLogHandler, dict( root=config[ 'master_root' ] ) ),
-     ( r"/([0-9]+)/(.*.tar.gz)", PkgSrcHandler, dict( root=config[ 'master_root' ] ) ),
+     ( r"/([0-9a-f-]+)/(.*.tar.gz)", PkgSrcHandler, dict( root=config[ 'master_root' ] ) ),
     ] )
 
     ws = Spout( config[ 'master_port' ], application )

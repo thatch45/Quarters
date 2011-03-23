@@ -16,6 +16,7 @@ class GlobalStatusHandler(tornado.web.RequestHandler):
         self.write( response_global_status( self.job_states ) )
 
 class ListOfPackagesHandler(tornado.web.RequestHandler):
+    ''' handles /ujid/list_of_packages '''
     def initialize( self, root ):
         self.root = root
 
@@ -23,6 +24,7 @@ class ListOfPackagesHandler(tornado.web.RequestHandler):
         self.write( response_list_of_packages( self.root, ujid ) )
 
 class PackageHandler(tornado.web.RequestHandler):
+    ''' handles /ujid/*.pkg.tar.xz '''
     def initialize( self, root ):
         self.root = root
 
@@ -31,6 +33,7 @@ class PackageHandler(tornado.web.RequestHandler):
         self.write( response_package( self.root, ujid, pkg ) )
 
 class BuildLogHandler(tornado.web.RequestHandler):
+    ''' handles /ujid/build_log '''
     def initialize( self, root ):
         self.root = root
 

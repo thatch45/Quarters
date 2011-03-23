@@ -4,6 +4,7 @@ import bz2
 from quarters.utils import fetch_states
 import json
 import urllib.request
+import os
 
 # TODO start using this decorator
 def quarters_compress( f ):

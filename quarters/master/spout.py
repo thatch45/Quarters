@@ -35,9 +35,9 @@ def start_master_web( job_states, pending_jobs, config ):
     application = tornado.web.Application( [
      ( r"/global_status", GlobalStatusHandler, dict( job_states=job_states ) ),
      ( r"/job", JobHandler, dict( pending_jobs=pending_jobs ) ),
-     ( r"/([0-9]+)/list_of_packages", ListOfPackagesHandler, dict( root=config[ 'master_root' ] ) ),
-     ( r"/([0-9]+)/(.*.pkg.tar.xz)", PackageHandler, dict( root=config[ 'master_root' ] ) ),
-     ( r"/([0-9]+)/build_log", BuildLogHandler, dict( root=config[ 'master_root' ] ) ),
+     ( r"/([0-9a-f-]+)/list_of_packages", ListOfPackagesHandler, dict( root=config[ 'master_root' ] ) ),
+     ( r"/([0-9a-f-]+)/(.*.pkg.tar.xz)", PackageHandler, dict( root=config[ 'master_root' ] ) ),
+     ( r"/([0-9a-f-]+)/build_log", BuildLogHandler, dict( root=config[ 'master_root' ] ) ),
      ( r"/([0-9a-f-]+)/(.*.tar.gz)", PkgSrcHandler, dict( root=config[ 'master_root' ] ) ),
     ] )
 

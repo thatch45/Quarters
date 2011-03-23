@@ -6,7 +6,7 @@ from multiprocessing import Process, Queue
 import subprocess
 import time
 from quarters.jobdescription import JobDescription
-from quarters.utils import get_url
+from quarters.protocol import get_url
 
 class JobOverlord( threading.Thread ):
     ''' controls all the poor joblings running on the server '''

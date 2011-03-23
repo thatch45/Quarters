@@ -1,7 +1,6 @@
 ''' file resereved for the communications of master and builder '''
 
 import bz2
-from quarters.utils import fetch_states
 import json
 import urllib.request
 import os

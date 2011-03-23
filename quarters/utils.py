@@ -2,11 +2,8 @@
 General utilities
 '''
 import os
-import sys
 import subprocess
-import urllib.request
 from hashlib import sha256
-import json
 
 def parse_pkgbuild(path):
     '''
@@ -55,10 +52,6 @@ def parse_pkg_data(data):
             pkgd[val].append(line.strip())
     return pkgd
 
-def get_url( url ):
-    ''' returns the contents at the url '''
-    return urllib.request.urlopen( url ).read()
-
 def sha256sum_file( filename ):
     ''' compute the sha256sum of filename '''
     s = sha256()
@@ -69,19 +62,3 @@ def sha256sum_file( filename ):
             s.update( data )
             data = f.read( bufsize )
     return s.hexdigest()
-
-def fetch_states( list_of_ips, port ):
-    ret = {}
-    for ip in list_of_ips:
-        url = 'http://' + ip + ':' + str( port ) + '/global_status'
-
-        try:
-            json_data = get_url( url )
-        except:
-           continue
-
-        status = json.loads( json_data.decode('utf-8' ) )
-
-        ret.update( { ip : status } )
-
-    return ret

@@ -76,6 +76,7 @@ def worker( job_queue, worker_id, job_states, config ):
         # "If the URL points to a local file, or a valid cached copy of the object exists, the object is not copied."
         # http://docs.python.org/py3k/library/urllib.request.html#urllib.request.urlretrieve
         urllib.request.urlretrieve( current_job.package_source, pkgsrc_path )
+        # TODO we could hard code this url to only master:masterport/ujid/ujid.src.tar.gz
 
         # extract
         temp_tar = tarfile.open( pkgsrc_path )

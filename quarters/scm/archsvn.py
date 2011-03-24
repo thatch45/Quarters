@@ -47,7 +47,7 @@ class ArchSVN:
             mv_return_code = subprocess.call( mvcmd , shell=True )
 
             # TODO we could probably get rid of the job_url and have the url always point to the master
-            job_url = foreign_url( self.master, self.master_port ) + '/' new_ujid + '/' + new_ujid + '.src.tar.gz'
+            job_url = foreign_url( self.master, self.master_port ) + '/' + new_ujid + '/' + new_ujid + '.src.tar.gz'
             # TODO fill in sha256sum
             # job description: ujid, cur_pkgname, pkgsrc, sha256sum of srcpkg, architecture to build (x86_64,i686,any)
             jd = JobDescription( new_ujid, pkgname, job_url, 'sha256sumgoeshere', 'x86_64' )

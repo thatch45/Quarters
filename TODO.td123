@@ -1,4 +1,6 @@
 stuff for now
+*** need to download src pkgs from "remote" to master_root/new_ujid/new_ujid.src.tar.gz
+*** or need to put the src.tar.gz packages directly into master_root/new_ujid/new_ujid.src.tar.gz
 clean up code
 work on package fetching
 

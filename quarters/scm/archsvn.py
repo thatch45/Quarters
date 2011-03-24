@@ -2,8 +2,9 @@ from quarters.jobdescription import JobDescription
 import uuid
 import os
 import urllib.request
+import subprocess
 
-class SVN:
+class ArchSVN:
     ''' an scm that fetches new jobs based on new entries from the aur rss feed '''
     def __init__( self, config ):
         self.prev_pkgname = ''
@@ -12,11 +13,12 @@ class SVN:
         self.master_port = config[ 'master_port' ]
         self.master_root = config[ 'master_root' ]
         self.svn_root = config[ 'svn_root' ]
+        self.dropbox = config[ 'dropbox' ]
 
     def get_jobs( self ):
         ''' returns a list of new jobdescriptions '''
         ret = []
-        svnup_cmd = [ 'svn', 'up' ]
+        svnup_cmd = [ '/usr/bin/svn', 'up' ]
         pkgs = set()
 
         with subprocess.Popen( svnup_cmd, cwd=self.svn_root, stdout=subprocess.PIPE, stderr=subprocess.STDOUT ) as proc:
@@ -25,23 +27,24 @@ class SVN:
 
         # find unique pkgnames
         for line in lines[0:-1]:
-            pkgname = line.split('/')[1]
+            pkgname = bytes.decode(line).split('/')[0].split()[1]
             pkgs.add( pkgname )
 
-        makepkg_cmd = [ 'makepkg', '--source' ]
+        makepkg_cmd = [ '/usr/bin/makepkg', '--source' ]
         for pkg in pkgs:
             new_ujid = str( uuid.uuid4() )
 
             # create a srcpkg
-            pkg_path = '/var/tmp/quarters/svn-packages/' + pkg + '/trunk'
-            subprocess.Popen( makepkg_cmd, cwd=pkg_path, stdout=subprocess.PIPE, stderr=subprocess.STDOUT )
+            print( pkg )
+            pkg_path = os.path.join( self.svn_root,  pkg + '/trunk' )
+            subprocess.Popen( makepkg_cmd, cwd=pkg_path ) #, stdout=subprocess.PIPE, stderr=subprocess.STDOUT )
+            srcpkg_path = os.path.join( self.dropbox, new_ujid + '.src.tar.gz' )
             # TODO: find a pythonic way of doing this
-            srcpkg_path = '/var/tmp/quarters/srcpkgs' + new_ujid + '.src.tar.gz'
-            mvcmd = '/bin/mv -f ' + pkg_path + '/' + pkg + '*.src.tar.gz ' + srcpkg_path
+            mvcmd = '/bin/mv -f ' + os.path.join( pkg_path, pkg + '*.src.tar.gz' ) + ' ' + srcpkg_path
             mv_return_code = subprocess.call( mvcmd , shell=True )
             # job description: ujid, cur_pkgname, pkgsrc, sha256sum of srcpkg, architecture to build (x86_64,i686,any)
             # TODO fill in sha256sum
-            jd = JobDescription( new_ujid, pkgname, 'file:///var/tmp/quarters/svn-packages/' + pkg + '/trunk/' + new_ujid + '.src.tar.gz', 'sha256sumgoeshere', 'x86_64' )
+            jd = JobDescription( new_ujid, pkgname, 'file://' + srcpkg_path, 'sha256sumgoeshere', 'x86_64' )
             ret.append( jd )
 
         return ret

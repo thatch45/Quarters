@@ -40,6 +40,7 @@ class ArchSVN:
             pkg_path = os.path.join( self.svn_root,  pkg + '/trunk' )
             subprocess.Popen( makepkg_cmd, cwd=pkg_path ) #, stdout=subprocess.PIPE, stderr=subprocess.STDOUT )
             srcpkg_path = os.path.join( self.master_root, new_ujid )
+            os.makedirs( srcpkg_path, exist_ok=True )
             srcpkg_path = os.path.join( srcpkg_path, new_ujid + '.src.tar.gz' )
 
             # TODO: find a pythonic way of doing this

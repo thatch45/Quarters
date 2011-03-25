@@ -24,7 +24,7 @@ class JobFetcher( threading.Thread ):
                 for jd in svn.get_jobs():
                     self.add_job( jd )
 
-            time.sleep( 10 )
+            time.sleep( 100 )
 
     def add_job( self, job_description ):
         self.pending_jobs.put( job_description )

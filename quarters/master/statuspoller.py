@@ -28,7 +28,7 @@ class StatusPoller( threading.Thread ):
                     if ujid in cur:
                         if cur[ ujid ] == 'done' and v != 'done':
                             self.job_states[ ujid ] = 'downloading'
-                            get_packages( ip, ujid, pkg_list, self.config )
+                            get_packages( ip, ujid, self.config )
                             get_build_log( ip, ujid, self.config )
                             self.job_states[ ujid ] = 'done'
 

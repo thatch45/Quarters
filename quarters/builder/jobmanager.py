@@ -60,6 +60,7 @@ def worker( job_queue, worker_id, job_states, config ):
     chroot_base = os.path.join( builder_root, 'chroots' )
     while 1:
         current_job = job_queue.get()
+        print( 'worker ' + str( worker_id ) + ' got a new job ' + current_job.ujid )
 
         # update job state here (running)
         job_states[ current_job.ujid ] = 'inprogress'

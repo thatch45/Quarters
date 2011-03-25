@@ -4,6 +4,7 @@ import bz2
 import json
 import urllib.request
 import os
+import glob
 
 # TODO start using this decorator
 def quarters_compress( f ):

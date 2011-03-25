@@ -26,7 +26,6 @@ class ArchSVN:
 
         with subprocess.Popen( svnup_cmd, cwd=self.svn_root, stdout=subprocess.PIPE, stderr=subprocess.STDOUT ) as proc:
             lines = proc.communicate()[0].splitlines()
-            #return_code = proc.returncode
 
         # find unique pkgnames
         for line in lines[0:-1]:

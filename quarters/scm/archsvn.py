@@ -47,8 +47,6 @@ class ArchSVN:
             os.makedirs( srcpkg_path, exist_ok=True )
             srcpkg_path = os.path.join( srcpkg_path, new_ujid + '.src.tar.gz' )
 
-            # TODO: find a pythonic way of doing this
-            #mvcmd = '/bin/mv -f ' + os.path.join( pkg_path, pkg + '*.src.tar.gz' ) + ' ' + srcpkg_path
             getsrc = glob.glob( os.path.join( pkg_path, pkg + '*.src.tar.gz' ) )
             print( 'glob returned' + str( getsrc ) )
 
@@ -57,9 +55,6 @@ class ArchSVN:
                 continue
 
             shutil.move( getsrc[0], srcpkg_path )
-            #mvcmd = [ '/bin/mv', os.path.join( pkg_path, pkg + '*.src.tar.gz' ), srcpkg_path ]
-            #print( mvcmd )
-            #mv_return_code = subprocess.call( mvcmd, shell=True )
 
             # TODO we could probably get rid of the job_url and have the url always point to the master
             job_url = foreign_url( self.master, self.master_port ) + '/' + new_ujid + '/' + new_ujid + '.src.tar.gz'

@@ -1,9 +1,5 @@
 stuff for now
-*** stop sending url of srcpkg, should always be master:port/ujid/ujid.src.tar.gz
-*** need to download src pkgs from "remote" to master_root/new_ujid/new_ujid.src.tar.gz
-*** or need to put the src.tar.gz packages directly into master_root/new_ujid/new_ujid.src.tar.gz
-clean up code
-work on package fetching
+*** stop sending url of srcpkg, should always be master:port/ujid/ujid.src.tar.gz, need to update PROTOCOL with this change
 
 stuff for later
 find out if current devtools set chroot barrier. if not patch them so that we don't have to worry about it in quarters

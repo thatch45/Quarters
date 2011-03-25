@@ -7,6 +7,8 @@ import subprocess
 import time
 from quarters.jobdescription import JobDescription
 from quarters.protocol import get_url
+import glob
+import shutil
 
 class JobOverlord( threading.Thread ):
     ''' controls all the poor joblings running on the server '''
@@ -96,10 +98,9 @@ def worker( job_queue, worker_id, job_states, config ):
             return_code = proc.returncode
 
         # move to final destination
-        # TODO: find a pythonic way of doing this
-        mvcmd = '/bin/mv -f ' + pkg_path + '/*.pkg.tar.xz ' + job_path
-        mv_return_code = subprocess.call( mvcmd , shell=True )
-        ###### end building
+        getsrc = glob.glob( os.path.join( pkg_path, '*.pkg.tar.xz' ) )
+        for pkg in getsrc:
+            shutil.move( pkg, job_path )
 
         # update job state (failed or done)
         if return_code != 0:

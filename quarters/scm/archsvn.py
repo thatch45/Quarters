@@ -51,6 +51,11 @@ class ArchSVN:
             #mvcmd = '/bin/mv -f ' + os.path.join( pkg_path, pkg + '*.src.tar.gz' ) + ' ' + srcpkg_path
             getsrc = glob.glob( os.path.join( pkg_path, pkg + '*.src.tar.gz' ) )
             print( 'glob returned' + str( getsrc ) )
+
+            if len( getsrc ) != 1:
+                print( 'error moving srcpkgs, not enough, or too many detected' )
+                continue
+
             shutil.move( getsrc[0], srcpkg_path )
             #mvcmd = [ '/bin/mv', os.path.join( pkg_path, pkg + '*.src.tar.gz' ), srcpkg_path ]
             #print( mvcmd )

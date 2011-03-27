@@ -6,6 +6,8 @@ import urllib.request
 import os
 import glob
 
+from quarters.utils import sha256sum_file
+
 # TODO start using this decorator
 def quarters_compress( f ):
     ''' decorator to compress argument '''

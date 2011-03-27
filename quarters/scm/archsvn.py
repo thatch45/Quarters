@@ -55,12 +55,10 @@ class ArchSVN:
 
             shutil.move( getsrc[0], srcpkg_path )
 
-            # TODO we could probably get rid of the job_url and have the url always point to the master
-            job_url = foreign_url( self.master, self.master_port ) + '/' + new_ujid + '/' + new_ujid + '.src.tar.gz'
             sha256sum = sha256sum_file( srcpkg_path )
 
             # job description: ujid, cur_pkgname, pkgsrc, sha256sum of srcpkg, architecture to build (x86_64,i686,any)
-            jd = JobDescription( new_ujid, pkgname, job_url, sha256sum, 'x86_64' )
+            jd = JobDescription( new_ujid, pkgname, sha256sum, 'x86_64' )
 
             ret.append( jd )
 

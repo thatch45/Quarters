@@ -13,7 +13,6 @@ To add a job to the master, you can emulate a builder using the following
 url:
 curl http://MASTERSERVER:MASTERPORT/job
 you should something like receive: {"ujid": "0", "architecture": "x86_64", 
-"package_source": "http://localhost:1337/0/datavisualizationapp.tar.gz", 
 "package_name": "datavisualizationapp", "sha256sum": "sha256sumgoeshere"}
 the job is now added to the queue
 run it again, you should get: NOJOBS

@@ -32,7 +32,7 @@ class ArchSVN:
             pkgname = bytes.decode(line).split('/')[0].split()[1]
             pkgs.add( pkgname )
 
-        makepkg_cmd = [ '/usr/bin/makepkg', '--source', '--skipinteg' ]
+        makepkg_cmd = [ 'makepkg', '--source', '--skipinteg' ]
         for pkg in pkgs:
             new_ujid = str( uuid.uuid4() )
 

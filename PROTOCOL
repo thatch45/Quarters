@@ -42,7 +42,7 @@ returns a job from a pool and removes it from its internal list of unassigned jo
 }
 
 if job in pool, also provide a way to access the source package.
-/ujid/ujid.src.tar.xz
+/ujid/ujid.src.tar.gz
 
 used to keep track of all the jobs handed out
 /global_status

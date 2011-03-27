@@ -78,7 +78,7 @@ def worker( job_queue, worker_id, job_states, config ):
         # need to make sure that urlretrieve overwrites if existing file with same name is found
         # "If the URL points to a local file, or a valid cached copy of the object exists, the object is not copied."
         # http://docs.python.org/py3k/library/urllib.request.html#urllib.request.urlretrieve
-        srcpkg_url = 'http://' + self.master + ':' + str( self.master_port ) '/' + current_job.ujid + '/' + current_job.ujid + '.src.tar.gz'
+        srcpkg_url = 'http://' + config[ 'master' ] + ':' + str( config[ 'master_port' ] ) + '/' + current_job.ujid + '/' + current_job.ujid + '.src.tar.gz'
         urllib.request.urlretrieve( srcpkg_url, pkgsrc_path )
 
         # extract

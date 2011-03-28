@@ -71,10 +71,9 @@ class PkgSrcHandler( tornado.web.RequestHandler ):
     def initialize( self, root ):
         self.root = root
 
-    ''' TODO pkgname parameter should be the same as ujid so we could remove it in the future '''
-    def get( self, ujid, pkgname ):
+    def get( self, ujid ):
         self.set_header( 'Content-Type', 'application/octet-stream' )
-        self.write( response_pkgsrc( self.root, ujid, pkgname ) )
+        self.write( response_pkgsrc( self.root, ujid ) )
 
 def start_master_web( job_states, pending_jobs, config ):
     application = tornado.web.Application( [
@@ -83,7 +82,7 @@ def start_master_web( job_states, pending_jobs, config ):
      ( r"/([0-9a-f-]+)/list_of_packages", ListOfPackagesHandler, dict( root=config[ 'master_root' ] ) ),
      ( r"/([0-9a-f-]+)/(.*.pkg.tar.xz)", PackageHandler, dict( root=config[ 'master_root' ] ) ),
      ( r"/([0-9a-f-]+)/build_log", BuildLogHandler, dict( root=config[ 'master_root' ] ) ),
-     ( r"/([0-9a-f-]+)/(.*.src.tar.gz)", PkgSrcHandler, dict( root=config[ 'master_root' ] ) ),
+     ( r"/([0-9a-f-]+)/.*.src.tar.gz", PkgSrcHandler, dict( root=config[ 'master_root' ] ) ),
     ] )
 
     ws = Spout( config[ 'master_port' ], application )

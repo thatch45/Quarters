@@ -6,7 +6,7 @@ import quarters.config
 
 from multiprocessing import Manager
 
-from quarters.master.spout import start_master_web
+from quarters.spout import start_master_web
 
 from quarters.master.statuspoller import StatusPoller
 

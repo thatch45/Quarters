@@ -31,7 +31,6 @@ class JobOverlord( threading.Thread ):
             p.start()
             self.processlist.append( p )
 
-        i = 0
         while 1:
             # keep 1 job in the buffer
             time.sleep( 2 )

@@ -135,7 +135,7 @@ def response_job( pending_jobs ):
 def response_pkgsrc( root, ujid ):
     content = ''
     pkgsrc_path = os.path.join( os.path.join( root, str( ujid ) ) )
-    pkgsrc_path = os.path.join( ujid_path, str( ujid ) + '.src.tar.gz' )
+    pkgsrc_path = os.path.join( pkgsrc_path, str( ujid ) + '.src.tar.gz' )
 
     with open( pkgsrc_path, 'rb' ) as fp:
         content = fp.read()

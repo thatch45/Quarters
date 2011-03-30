@@ -11,22 +11,21 @@ ujid = unique job id, no two jobs will ever have the same ujid
 used to check up on progress
 /global_status
 {
- <ujid> : <status - notdone,inprogress,done,failed>,
+ <ujid> : {
+           status : <notdone,inprogress,done,failed>,
+           packages : [
+                       {
+                        pkgname : "a.pkg.tar.xz",
+                        sha256sum : <sha256sum>
+                       },
+                       ...
+                      ]
+          },
  ...
 }
 
-if done provide the following interface:
-/ujid/list_of_packages
-[
- {
-  pkgname : "a.pkg.tar.xz",
-  sha256sum : <sha256sum>
- }
- ...
-]
-
 if done, also provide a way to access the built packages.
-/ujid/a.pkg.tar.xz
+/ujid/a.pkg.tar.{gz, xz}
 
 if done, also provide the full build log
 /ujid/build_log
@@ -47,19 +46,18 @@ if job in pool, also provide a way to access the source package.
 used to keep track of all the jobs handed out
 /global_status
 {
- <ujid> : <status - notdone,inprogress,done,failed,downloading,stop>,
+ <ujid> : {
+           status : <notdone,inprogress,done,failed,downloading,stop>,
+           packages : [
+                       {
+                        pkgname : "a.pkg.tar.xz",
+                        sha256sum : <sha256sum>
+                       },
+                       ...
+                      ]
+          },
  ...
 }
-
-if done provide the following interface:
-/ujid/list_of_packages
-[
- {
-  pkgname : "a.pkg.tar.xz",
-  sha256sum : <sha256sum>
- }
- ...
-]
 
 if done, also provide a way to access the built packages.
 /ujid/a.pkg.tar.xz

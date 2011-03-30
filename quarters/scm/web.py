@@ -45,6 +45,8 @@ class Web:
             print( 'glob returned' + str( getsrc ) )
             if len( getsrc ) != 1:
                 print( 'error, not enough, or too many srcpkgs detected in Web' )
+                # TODO change status instead of just ignoring the package
+                # also need to create a build log with a message from the scm telling what happened
                 continue
 
             # get the sha256sum of the file

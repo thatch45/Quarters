@@ -1,7 +1,8 @@
 import threading
 import time
 #from quarters.scm.aurrss import AURRSS
-from quarters.scm.archsvn import ArchSVN
+#from quarters.scm.archsvn import ArchSVN
+from quarters.scm.web import Web
 
 class JobFetcher( threading.Thread ):
     ''' manages the status of jobs '''
@@ -15,14 +16,16 @@ class JobFetcher( threading.Thread ):
     def run( self ):
         ''' iterator over all scms to fetch new jobs '''
         #ar = AURRSS( self.config )
-        svn = ArchSVN( self.config )
+        #svn = ArchSVN( self.config )
+        web = Web( self.config )
 
         while 1:
             # keep 2 jobs in the buffer
             if self.pending_jobs.qsize() < 2:
                 
-                for jd in svn.get_jobs():
-                    self.add_job( jd )
+                for jd in web.get_jobs():
+                    if jd.ujid not in self.job_states:
+                        self.add_job( jd )
 
             time.sleep( 100 )
 

@@ -31,7 +31,7 @@ def stat():
     for package in packages_collection.find():
         jobdescription = { 'uuid' : package[ 'uuid' ], 'pkgname' : package[ 'pkgname' ] }
         jobs.append( jobdescription )
-    return '<p> %s </p>' % json.dumps( jobs )
+    return json.dumps( jobs )
 
 mongo_connection = Connection()
 quarters_database = mongo_connection[ 'quarters' ]

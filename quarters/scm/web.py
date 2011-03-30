@@ -31,6 +31,9 @@ class Web:
             # copy over the sources to a temp directory
             orig_dir = os.path.join( '/var/abs/core', rpkg[ 'pkgname' ] )
             dest_dir = os.path.join( '/tmp', rpkg[ 'uuid' ] )
+            # check if we already did this
+            if os.path.exists( dest_dir ):
+                continue
             shutil.copytree( orig_dir, dest_dir )
 
             # build the .src.tar.gz file

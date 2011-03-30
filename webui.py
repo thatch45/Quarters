@@ -4,6 +4,7 @@ from bottle import get, post, request, run
 from pymongo import Connection
 import json
 import uuid
+import urllib.request
 
 @get('/')
 def main_form():
@@ -32,6 +33,28 @@ def stat():
         jobdescription = { 'uuid' : package[ 'uuid' ], 'pkgname' : package[ 'pkgname' ] }
         jobs.append( jobdescription )
     return json.dumps( jobs )
+
+@get('/mstat')
+def mstat():
+    content = '<table>'
+    url = 'http://76.191.31.83:1337/global_status'
+    states = json.loads( bytes.decode( urllib.request.urlopen( url ).read() ) )
+    for k in states:
+        content += '<tr>'
+        content += '<td>' + k + '</td>'
+        content += '<td>' + states[ k ] + '</td>'
+        if states[ k ] == 'done':
+            url = 'http://76.191.31.83:1337/' + k + '/build_log'
+            content += '<td> <a href="' + url + '">' + url + '</a> </td>'
+            url = 'http://76.191.31.83:1337/' + k + '/list_of_packages'
+            content += '<td> <a href="' + url + '">' + url + '</a> </td>'
+        if states[ k ] == 'failed':
+            url = 'http://76.191.31.83:1337/' + k + '/build_log'
+            content += '<td> <a href="' + url + '">' + url + '</a> </td>'
+        content += '</tr>'
+    content += '</table>'
+    return content
+    
 
 mongo_connection = Connection()
 quarters_database = mongo_connection[ 'quarters' ]

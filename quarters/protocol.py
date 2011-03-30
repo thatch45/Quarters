@@ -103,6 +103,7 @@ def response_global_status( job_states ):
 def response_list_of_packages( root, ujid ):
     ujid_path = os.path.join( root, str( ujid ) )
     results = glob.glob( ujid_path + '/*.pkg.tar.xz' )
+    results += glob.glob( ujid_path + '/*.pkg.tar.gz' )
     results = list( map( lambda x: x.split('/')[-1], results ) )
     temp = [{ 'pkgname' : i, 'sha256sum' : sha256sum_file( ujid_path + '/' + i ) } for i in results]
     return json.dumps( temp )

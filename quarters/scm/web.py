@@ -24,14 +24,13 @@ class Web:
         temp_json = bytes.decode( json_data )
         print( 'temp_json is:', temp_json )
         print( 'json_data is:', json_data )
-        remote_pkgs = json.loads( json_data )
+        remote_pkgs = json.loads( temp_json )
 
         makepkg_cmd = [ 'makepkg', '--source', '--skipinteg' ]
         for rpkg in remote_pkgs:
             # copy over the sources to a temp directory
             orig_dir = os.path.join( '/var/abs/core', rpkg[ 'pkgname' ] )
             dest_dir = os.path.join( '/tmp', rpkg[ 'uuid' ] )
-            os.makedirs( dest_dir, exist_ok=True )
             shutil.copytree( orig_dir, dest_dir )
 
             # build the .src.tar.gz file

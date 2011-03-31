@@ -96,13 +96,14 @@ def worker( job_queue, worker_id, job_states, config ):
                 f.write( proc.communicate()[0] )
             return_code = proc.returncode
 
+        # update job state (failed or done)
+        if return_code != 0:
+            job_states[ current_job.ujid ] = 'failed'
+            continue
+
         # move to final destination
         getsrc = glob.glob( os.path.join( pkg_path, '*.pkg.tar.xz' ) )
         for pkg in getsrc:
             shutil.move( pkg, job_path )
 
-        # update job state (failed or done)
-        if return_code != 0:
-            job_states[ current_job.ujid ] = 'failed'
-        else:
-            job_states[ current_job.ujid ] = 'done'
+        job_states[ current_job.ujid ] = 'done'

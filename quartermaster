@@ -4,17 +4,16 @@ from quarters.master.jobfetcher import JobFetcher
 
 import quarters.config
 
-from multiprocessing import Manager
+from quarters.state import State
 
 from quarters.spout import start_master_web
 
 from quarters.master.statuspoller import StatusPoller
 
 if __name__ == '__main__':
-    manager = Manager()
-    job_states = manager.dict()
+    local_state = State()
 
-    pending_jobs = manager.Queue()
+    pending_jobs = multiprocessing.Manager().Queue()
 
     config = quarters.config.read_config('conf/quarters.conf')
     print( config )

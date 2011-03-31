@@ -39,3 +39,6 @@ class State:
 
     def put_pending_job( self, job_description )
         return self.pending.put( job_description )
+
+    def get_ujids( self )
+        return self.state.keys()

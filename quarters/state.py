@@ -18,7 +18,9 @@ import multiprocessing
 
 class State:
     def __init__( self ):
-        self.state = multiprocessing.Manager().dict
+        manager = multiprocessing.Manager()
+        self.state = manager.dict()
+        self.pending = manager.Queue()
 
     def set_status( self, ujid, status ):
         self.state[ ujid ][ 'status' ] = status
@@ -31,3 +33,9 @@ class State:
 
     def get_packages( self, ujid ):
         return self.state[ ujid ][ 'packages' ]
+
+    def get_pending_job( self )
+        return self.pending.get()
+
+    def put_pending_job( self, job_description )
+        return self.pending.put( job_description )

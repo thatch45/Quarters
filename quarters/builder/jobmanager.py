@@ -2,7 +2,7 @@ import threading
 import urllib.request
 import os
 import tarfile
-from multiprocessing import Process, Queue
+from multiprocessing import Process
 import subprocess
 import time
 from quarters.jobdescription import JobDescription
@@ -17,7 +17,6 @@ class JobOverlord( threading.Thread ):
         threading.Thread.__init__( self )
         self.max_jobs = int( config['chroots'] )
         self.processlist = []
-        self.pending_jobs = Queue()
         self.local_state = local_state
         self.builder_root = config['builder_root']
         self.master = config['master']
@@ -27,7 +26,7 @@ class JobOverlord( threading.Thread ):
     def run( self ):
         # start all the workers
         for worker_id in range( self.max_jobs ):
-            p = Process( target=worker, args=( self.pending_jobs, worker_id, self.local_state, self.config ) )
+            p = Process( target=worker, args=( worker_id, self.local_state, self.config ) )
             p.start()
             self.processlist.append( p )
 
@@ -35,7 +34,7 @@ class JobOverlord( threading.Thread ):
             # keep 1 job in the buffer
             time.sleep( 2 )
 
-            if self.pending_jobs.qsize() < 1:
+            if self.local_state.size_pending_job() < 1:
                 new_job_url = 'http://' + self.master + ':' + str( self.master_port ) + '/job'
                 
                 try:
@@ -56,7 +55,8 @@ def worker( job_queue, worker_id, local_state, config ):
     builder_root = config['builder_root']
     chroot_base = os.path.join( builder_root, 'chroots' )
     while 1:
-        current_job = job_queue.get()
+        current_job = local_state.get_pending_job()
+        print( 'worker', worker_id, 'got job' )
 
         # update job state here (running)
         local_state.set_status( current_job.ujid, 'inprogress' )
@@ -107,8 +107,8 @@ def worker( job_queue, worker_id, local_state, config ):
         ujid_path = os.path.join( root, str( current_job.ujid ) )
         #results = glob.glob( ujid_path + '/*.pkg.tar.xz' )
         #results += glob.glob( ujid_path + '/*.pkg.tar.gz' )
-        results = list( map( lambda x: x.split('/')[-1], getsrc ) )
+        results = list( map( (lambda x: x.split('/')[-1]), getsrc ) )
         temp = [{ 'pkgname' : i, 'sha256sum' : sha256sum_file( ujid_path + '/' + i ) } for i in results]
-        local_state.set_packages( current_job.ujid, map( lambda x:x.split('/')[-1], getsrc ) )
+        local_state.set_packages( current_job.ujid, map( (lambda x: x.split('/')[-1]), getsrc ) )
 
         local_state.set_status( current_job.ujid, 'done' )

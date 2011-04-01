@@ -4,25 +4,24 @@ from quarters.builder.jobmanager import JobOverlord
 
 import quarters.config
 
-from multiprocessing import Manager
+from quarters.state import State
 
 from quarters.spout import start_builder_web
 
 from quarters.builder.statuspoller import StatusPoller
 
 if __name__ == '__main__':
-    manager = Manager()
-    job_states = manager.dict()
+    local_state = State()
 
     config = quarters.config.read_config('conf/quarters.conf')
     print( config )
 
-    jo = JobOverlord( job_states, config )
+    jo = JobOverlord( local_state, config )
     jo.start()
 
     # keep master as list to reuse fetch status
-    sp = StatusPoller( job_states, config )
+    sp = StatusPoller( local_state, config )
     sp.start()
 
     # get it up!
-    start_builder_web( job_states, config )
+    start_builder_web( local_state, config )

@@ -13,17 +13,15 @@ from quarters.master.statuspoller import StatusPoller
 if __name__ == '__main__':
     local_state = State()
 
-    pending_jobs = multiprocessing.Manager().Queue()
-
     config = quarters.config.read_config('conf/quarters.conf')
     print( config )
 
-    jf = JobFetcher( job_states, pending_jobs, config )
+    jf = JobFetcher( local_state, config )
     jf.start()
 
     # list of ips, ports of those ips
-    sp = StatusPoller( job_states, config )
+    sp = StatusPoller( local_state, config )
     sp.start()
 
     # get it up!
-    start_master_web( job_states, pending_jobs, config )
+    start_master_web( local_state, config )

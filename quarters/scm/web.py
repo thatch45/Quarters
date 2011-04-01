@@ -1,9 +1,7 @@
 from quarters.jobdescription import JobDescription
 import uuid
 import os
-import urllib.request
 import subprocess
-from quarters.protocol import foreign_url
 from quarters.utils import sha256sum_file
 import glob
 import shutil
@@ -20,7 +18,12 @@ class Web:
 
         ret = []
 
-        json_data = get_url( 'http://localhost:8080/stat' )
+        # make sure we can exit safely if the web ui is down
+        try:
+            json_data = get_url( 'http://localhost:8080/stat' )
+        except:
+            return ret
+
         temp_json = bytes.decode( json_data )
         print( 'temp_json is:', temp_json )
         print( 'json_data is:', json_data )

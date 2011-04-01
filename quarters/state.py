@@ -34,11 +34,33 @@ class State:
     def get_packages( self, ujid ):
         return self.state[ ujid ][ 'packages' ]
 
-    def get_pending_job( self )
+    def get_pending_job( self ):
         return self.pending.get()
 
-    def put_pending_job( self, job_description )
-        return self.pending.put( job_description )
+    def get_nowait_pending_job( self ):
+        return self.pending.get_nowait()
 
-    def get_ujids( self )
+    def put_pending_job( self, job_description ):
+        self.pending.put( job_description )
+
+    def size_pending_job( self ):
+        return self.pending.qsize()
+
+    def get_ujids( self ):
         return self.state.keys()
+
+    def get_state_dict( self ):
+        return dict( self.state )
+
+    def create_ujid( ujid ):
+        self.state[ ujid ] = {}
+        self.set_status( job_description.ujid, 'notdone' )
+        self.set_packages( job_description.ujid, [] )
+
+    def remove_ujid( ujid ):
+        del self.state[ ujid ]
+
+def json_to_state( json ):
+    ret = State()
+    ret.state.update( new_dict )
+    return ret

@@ -5,37 +5,42 @@ import json
 import urllib.request
 import os
 import glob
+import queue # for queue.Empty exception
+from quarters.state import json_to_state, State
 
 from quarters.utils import sha256sum_file
 
-# TODO start using this decorator
-def quarters_compress( f ):
-    ''' decorator to compress argument '''
-    return lambda x: bz2.compress( f( x ) )
-
-# TODO start using this decorator
-def quarters_decompress( f ):
-    ''' decorator to decompress argument '''
-    return lambda x: bz2.decompress( f( x ) )
-
-def foreign_url( ip, port ):
+def http_url( ip, port ):
     '''
-    Retrive the master url from the configuration
+    return an http url from the given ip and port in the form http://ip:port with no trailing '/'
+
+    >>> http_url( '127.0.0.1', '80' )
+    'http://127.0.0.1:80'
     '''
-    return 'http://' + ip + ':' + str( port )
+    return 'http://' + ip + ':' + port
+
+def get_state( ip, port ):
+    ret = State()
+    url = http_url( ip, port ) + '/global_status'
+    print( url )
+    try:
+        json_data = get_url( url )
+        remote_state = json.loads( json_data.decode('utf-8' ) )
+        ret = json_to_state( remote_state )
+    except:
+        #print( 'failed to retrieve state' )
+        ret = State()
+    return ret
 
 def master_state( config ):
     '''
     Download the master state file and translate the data to a structure
     '''
-    ret = {}
-    url = foreign_url( config[ 'master' ], config[ 'master_port' ] ) + '/global_status'
+    ret = None
     try:
-        json_data = get_url( url )
-        status = json.loads( json_data.decode('utf-8' ) )
-        ret.update( status )
+        ret = get_state( config[ 'master' ], config[ 'master_port' ] )
     except:
-        print( 'failed to retrieve master state' )
+        ret = None
     return ret
 
 def builder_states( config ):
@@ -44,13 +49,11 @@ def builder_states( config ):
     '''
     ret = {}
     for ip in config[ 'builders' ]:
-        url = foreign_url( ip, config[ 'builder_port' ] ) + '/global_status'
         try:
-            json_data = get_url( url )
+            remote_state = get_state( ip, config[ 'builder_port' ] )
         except:
-           continue
-        status = json.loads( json_data.decode('utf-8' ) )
-        ret.update( { ip : status } )
+            continue
+        ret.update( { ip : remote_state } )
     return ret
 
 def get_url( url ):
@@ -58,14 +61,6 @@ def get_url( url ):
     returns the contents at the url
     '''
     return urllib.request.urlopen( url ).read()
-
-def get_package_list( ip, ujid, config ):
-    '''
-    gets a dictionary representing the object at http://ip:port/ujid/list_of_packages
-    '''
-    port = int( config[ 'builder_port' ] )
-    url = foreign_url( ip, port ) + '/' + ujid + '/list_of_packages'
-    return json.loads( get_url( url ).decode( 'utf-8' ) )
 
 def get_packages( ip, ujid, config ):
     # TODO: implement when we start using https
@@ -96,17 +91,8 @@ def get_build_log( ip, ujid, config ):
     build_log_path = os.path.join( root_ujid_path, 'build_log' )
     urllib.request.urlretrieve( build_log_url, build_log_path )
 
-def response_global_status( job_states ):
-    # we need to wrap in a dict because job_states is a dict proxy
-    return json.dumps( dict( job_states ) )
-
-def response_list_of_packages( root, ujid ):
-    ujid_path = os.path.join( root, str( ujid ) )
-    results = glob.glob( ujid_path + '/*.pkg.tar.xz' )
-    results += glob.glob( ujid_path + '/*.pkg.tar.gz' )
-    results = list( map( lambda x: x.split('/')[-1], results ) )
-    temp = [{ 'pkgname' : i, 'sha256sum' : sha256sum_file( ujid_path + '/' + i ) } for i in results]
-    return json.dumps( temp )
+def response_global_status( local_state ):
+    return json.dumps( local_state.get_state_dict() )
 
 def response_package( root, ujid, pkg ):
     ujid_path = os.path.join( root, str( ujid ) )
@@ -124,12 +110,12 @@ def response_build_log( root, ujid ):
         content = fp.read()
     return content
 
-def response_job( pending_jobs ):
+def response_job( local_state ):
     ret = ''
     try:
-        jd = pending_jobs.get_nowait()
+        jd = local_state.get_nowait_pending_job()
         ret = jd.dump_json()
-    except:
+    except queue.Empty:
         ret = 'NOJOBS'
     return ret
 
@@ -141,3 +127,13 @@ def response_pkgsrc( root, ujid ):
     with open( pkgsrc_path, 'rb' ) as fp:
         content = fp.read()
     return content
+
+# TODO start using this decorator
+def quarters_compress( f ):
+    ''' decorator to compress argument '''
+    return lambda x: bz2.compress( f( x ) )
+
+# TODO start using this decorator
+def quarters_decompress( f ):
+    ''' decorator to decompress argument '''
+    return lambda x: bz2.decompress( f( x ) )

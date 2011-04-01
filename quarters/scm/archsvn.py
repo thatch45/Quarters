@@ -1,9 +1,7 @@
 from quarters.jobdescription import JobDescription
 import uuid
 import os
-import urllib.request
 import subprocess
-from quarters.protocol import foreign_url
 from quarters.utils import sha256sum_file
 import glob
 import shutil

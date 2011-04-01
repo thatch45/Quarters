@@ -3,6 +3,10 @@ devtools - for building in a clean chroot environment
 AUR: python3-tornado-git - for the web server
 AUR: python3-yaml - for reading configs
 
+For webui.py
+AUR: python3-pymongo
+AUR: python-bottle
+
 Adapt your configuration (conf/quarters.conf)
 Make sure that the master and the builders are configured correctly
 Start buildermaster

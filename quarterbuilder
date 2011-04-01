@@ -14,7 +14,6 @@ if __name__ == '__main__':
     local_state = State()
 
     config = quarters.config.read_config('conf/quarters.conf')
-    print( config )
 
     jo = JobOverlord( local_state, config )
     jo.start()

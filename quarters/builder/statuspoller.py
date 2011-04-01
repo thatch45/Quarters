@@ -16,7 +16,7 @@ class StatusPoller( threading.Thread ):
             remote_state = master_state( self.config )
 
             print( 'master status:', remote_state.get_state_dict() )
-            print( 'local status:', self.local_state )
+            print( 'local status:', self.local_state.get_state_dict() )
             
             remote_ujids = set( remote_state.get_ujids() ) # master
             local_ujids = set( self.local_state.get_ujids() ) # builder

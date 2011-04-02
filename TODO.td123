@@ -1,5 +1,5 @@
 stuff for now
-*** stop sending url of srcpkg, should always be master:port/ujid/ujid.src.tar.gz, need to update PROTOCOL with this change
+add a custom repo for rebuilds
 
 stuff for later
 find out if current devtools set chroot barrier. if not patch them so that we don't have to worry about it in quarters

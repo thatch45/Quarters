@@ -20,7 +20,7 @@ class Web:
 
         # make sure we can exit safely if the web ui is down
         try:
-            json_data = get_url( 'http://localhost:8080/stat' )
+            json_data = get_url( 'http://localhost:2000/stat' )
         except:
             return ret
 

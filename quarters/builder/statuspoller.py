@@ -22,7 +22,7 @@ class StatusPoller( threading.Thread ):
             local_ujids = set( self.local_state.get_ujids() ) # builder
             for ujid in remote_ujids.intersection( local_ujids ):
                 local_status = self.local_state.get_status( ujid )
-                remote_status = self.remote_state.get_status( ujid )
+                remote_status = remote_state.get_status( ujid )
                 if local_status in ( 'done', 'failed' ) and remote_status == local_status:
                     # remove from builder since master already synced this job
                     rm_path = os.path.join( self.builder_root, ujid )

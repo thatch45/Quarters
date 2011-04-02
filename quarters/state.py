@@ -66,7 +66,7 @@ class State:
     def get_state_dict( self ):
         return dict( self.state )
 
-    def remove_ujid( ujid ):
+    def remove_ujid( self, ujid ):
         del self.state[ ujid ]
 
 def json_to_state( json ):

@@ -83,9 +83,9 @@ def worker( worker_id, local_state, config ):
 
         # chroot
         if current_job.architecture == 'i686':
-            chroot_cmd = [ 'sudo', 'extra-i686-build', '-r', chroot_path ]
+            chroot_cmd = [ 'sudo', 'extra-i686-build', '-r', config[ 'chroot_root' ] ]
         else:
-            chroot_cmd = [ 'sudo', 'extra-x86_64-build', '-r', chroot_path ]
+            chroot_cmd = [ 'sudo', 'extra-x86_64-build', '-r', config[ 'chroot_root' ] ]
 
         with subprocess.Popen( chroot_cmd, cwd=pkg_path, stdout=subprocess.PIPE, stderr=subprocess.STDOUT ) as proc:
             log_path = os.path.join( job_path, 'build_log' )

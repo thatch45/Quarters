@@ -9,6 +9,7 @@ from quarters.jobdescription import JobDescription
 from quarters.protocol import get_url
 import glob
 import shutil
+from quarters.utils import sha256sum_file
 
 class JobOverlord( threading.Thread ):
     ''' controls all the poor joblings running on the server '''

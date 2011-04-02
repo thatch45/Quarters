@@ -28,6 +28,6 @@ class StatusPoller( threading.Thread ):
                     rm_path = os.path.join( self.builder_root, ujid )
                     shutil.rmtree( rm_path )
                     # remove the key from the builder status since it is done
-                    local_state.remove_ujid( ujid )
+                    self.local_state.remove_ujid( ujid )
 
             time.sleep( 2 )

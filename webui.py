@@ -42,13 +42,11 @@ def mstat():
     for k in states:
         content += '<tr>'
         content += '<td>' + k + '</td>'
-        content += '<td>' + states[ k ] + '</td>'
-        if states[ k ] == 'done':
+        content += '<td>' + states[ k ][ 'status' ] + '</td>'
+        if states[ k ][ 'status' ] == 'done':
             url = 'http://76.191.31.83:1337/' + k + '/build_log'
             content += '<td> <a href="' + url + '">' + url + '</a> </td>'
-            url = 'http://76.191.31.83:1337/' + k + '/list_of_packages'
-            content += '<td> <a href="' + url + '">' + url + '</a> </td>'
-        if states[ k ] == 'failed':
+        if states[ k ][ 'status' ] == 'failed':
             url = 'http://76.191.31.83:1337/' + k + '/build_log'
             content += '<td> <a href="' + url + '">' + url + '</a> </td>'
         content += '</tr>'
@@ -62,5 +60,5 @@ packages_collection = quarters_database[ 'packages' ]
 # clear out crud since it's all a test
 packages_collection.drop()
 
-run(host='localhost', port=8080)
+run(host='localhost', port=1000)
 

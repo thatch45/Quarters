@@ -42,7 +42,7 @@ class Spout:
 def start_builder_web( local_state, config ):
     application = tornado.web.Application( [
         ( r"/global_status", GlobalStatusHandler, dict( local_state=local_state ) ),
-        ( r"/([0-9a-f-]+)/(.*.pkg.tar.xz)", PackageHandler, dict( root=config[ 'builder_root' ] ) ),
+        ( r"/([0-9a-f-]+)/(.*.pkg.tar.[gx]z)", PackageHandler, dict( root=config[ 'builder_root' ] ) ),
         ( r"/([0-9a-f-]+)/build_log", BuildLogHandler, dict( root=config[ 'builder_root' ] ) ),
     ] )
 
@@ -70,7 +70,7 @@ def start_master_web( local_state, config ):
     application = tornado.web.Application( [
      ( r"/global_status", GlobalStatusHandler, dict( local_state=local_state ) ),
      ( r"/job", JobHandler, dict( local_state=local_state ) ),
-     ( r"/([0-9a-f-]+)/(.*.pkg.tar.xz)", PackageHandler, dict( root=config[ 'master_root' ] ) ),
+     ( r"/([0-9a-f-]+)/(.*.pkg.tar.[gx]z)", PackageHandler, dict( root=config[ 'master_root' ] ) ),
      ( r"/([0-9a-f-]+)/build_log", BuildLogHandler, dict( root=config[ 'master_root' ] ) ),
      ( r"/([0-9a-f-]+)/.*.src.tar.gz", PkgSrcHandler, dict( root=config[ 'master_root' ] ) ),
     ] )

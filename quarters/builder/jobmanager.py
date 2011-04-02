@@ -64,8 +64,7 @@ def worker( worker_id, local_state, config ):
 
         job_path = os.path.join( builder_root, str(current_job.ujid) )
         pkgsrc_path = os.path.join( job_path, current_job.package_name + '.tar.gz' )
-        #pkg_path = os.path.join( job_path, current_job.package_name )
-        pkg_path = os.path.join( job_path, current_job.ujid )
+        pkg_path = os.path.join( job_path, current_job.package_name )
         chroot_path = os.path.join( chroot_base, 'worker' + str( worker_id ) )
 
         os.makedirs( job_path, exist_ok=True )
@@ -101,9 +100,12 @@ def worker( worker_id, local_state, config ):
 
         # move to final destination
         getsrc = glob.glob( os.path.join( pkg_path, '*.pkg.tar.xz' ) )
+        getsrc += glob.glob( os.path.join( pkg_path, '*.pkg.tar.gz' ) )
         for pkg in getsrc:
             shutil.move( pkg, job_path )
 
+        getsrc = glob.glob( os.path.join( job_path, '*.pkg.tar.xz' ) )
+        getsrc += glob.glob( os.path.join( job_path, '*.pkg.tar.gz' ) )
         # update list of packages
         root = builder_root
         ujid_path = os.path.join( root, str( current_job.ujid ) )

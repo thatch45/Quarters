@@ -50,9 +50,7 @@ class State:
         # create the initial structure for the empty job in the state
         self.state[ job_description.ujid ] = {}
         self.set_status( job_description.ujid, 'notdone' )
-        #print( self.state[ job_description.ujid ][ 'status' ] )
         self.state[ job_description.ujid ][ 'status' ] = 'notdone'
-        print( self.state[ job_description.ujid ][ 'status' ] )
         self.set_packages( job_description.ujid, [] )
 
         self.pending.put( job_description )

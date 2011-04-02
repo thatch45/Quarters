@@ -54,10 +54,8 @@ class JobOverlord( threading.Thread ):
 def worker( worker_id, local_state, config ):
     ''' worker where the grunt work takes place '''
     builder_root = config['builder_root']
-    chroot_base = os.path.join( builder_root, 'chroots' )
     while 1:
         current_job = local_state.get_pending_job()
-        print( 'worker', worker_id, 'got job' )
 
         # update job state here (running)
         local_state.set_status( current_job.ujid, 'inprogress' )
@@ -65,7 +63,6 @@ def worker( worker_id, local_state, config ):
         job_path = os.path.join( builder_root, str(current_job.ujid) )
         pkgsrc_path = os.path.join( job_path, current_job.package_name + '.tar.gz' )
         pkg_path = os.path.join( job_path, current_job.package_name )
-        chroot_path = os.path.join( chroot_base, 'worker' + str( worker_id ) )
 
         os.makedirs( job_path, exist_ok=True )
 
@@ -93,7 +90,7 @@ def worker( worker_id, local_state, config ):
                 f.write( proc.communicate()[0] )
             return_code = proc.returncode
 
-        # update job state (failed or done)
+        # if failed, just ignore the rest of the code
         if return_code != 0:
             local_state.set_status( current_job.ujid, 'failed' )
             continue
@@ -105,12 +102,8 @@ def worker( worker_id, local_state, config ):
 
         getsrc = glob.glob( os.path.join( job_path, '*.pkg.tar.[gx]z' ) )
         # update list of packages
-        root = builder_root
-        ujid_path = os.path.join( root, str( current_job.ujid ) )
-        #results = glob.glob( ujid_path + '/*.pkg.tar.xz' )
-        #results += glob.glob( ujid_path + '/*.pkg.tar.gz' )
         results = list( map( (lambda x: x.split('/')[-1]), getsrc ) )
-        temp = [{ 'pkgname' : i, 'sha256sum' : sha256sum_file( ujid_path + '/' + i ) } for i in results]
+        temp = [{ 'pkgname' : i, 'sha256sum' : sha256sum_file( job_path + '/' + i ) } for i in results]
         local_state.set_packages( current_job.ujid, temp )
 
         local_state.set_status( current_job.ujid, 'done' )

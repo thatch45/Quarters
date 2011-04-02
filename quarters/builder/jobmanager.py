@@ -99,13 +99,11 @@ def worker( worker_id, local_state, config ):
             continue
 
         # move to final destination
-        getsrc = glob.glob( os.path.join( pkg_path, '*.pkg.tar.xz' ) )
-        getsrc += glob.glob( os.path.join( pkg_path, '*.pkg.tar.gz' ) )
+        getsrc = glob.glob( os.path.join( pkg_path, '*.pkg.tar.[gx]z' ) )
         for pkg in getsrc:
             shutil.move( pkg, job_path )
 
-        getsrc = glob.glob( os.path.join( job_path, '*.pkg.tar.xz' ) )
-        getsrc += glob.glob( os.path.join( job_path, '*.pkg.tar.gz' ) )
+        getsrc = glob.glob( os.path.join( job_path, '*.pkg.tar.[gx]z' ) )
         # update list of packages
         root = builder_root
         ujid_path = os.path.join( root, str( current_job.ujid ) )

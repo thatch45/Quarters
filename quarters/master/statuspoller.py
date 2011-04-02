@@ -27,6 +27,8 @@ class StatusPoller( threading.Thread ):
                     if remote_status == 'done' and local_status != 'done':
                         self.local_state.set_status( ujid, 'downloading' )
                         get_packages( ip, ujid, self.config )
+                        # need to add the packages to the local state
+                        self.local_state.set_packages( ujid, remote_state.get_packages( ujid ) )
                         get_build_log( ip, ujid, self.config )
                         self.local_state.set_status( ujid, 'done' )
 

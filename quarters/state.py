@@ -71,5 +71,5 @@ class State:
 
 def json_to_state( json ):
     ret = State()
-    ret.state.update( new_dict )
+    ret.state.update( json )
     return ret

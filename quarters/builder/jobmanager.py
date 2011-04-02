@@ -50,7 +50,7 @@ class JobOverlord( threading.Thread ):
                 else:
                     print( 'NOJOBS' )
 
-def worker( job_queue, worker_id, local_state, config ):
+def worker( worker_id, local_state, config ):
     ''' worker where the grunt work takes place '''
     builder_root = config['builder_root']
     chroot_base = os.path.join( builder_root, 'chroots' )
@@ -109,6 +109,6 @@ def worker( job_queue, worker_id, local_state, config ):
         #results += glob.glob( ujid_path + '/*.pkg.tar.gz' )
         results = list( map( (lambda x: x.split('/')[-1]), getsrc ) )
         temp = [{ 'pkgname' : i, 'sha256sum' : sha256sum_file( ujid_path + '/' + i ) } for i in results]
-        local_state.set_packages( current_job.ujid, map( (lambda x: x.split('/')[-1]), getsrc ) )
+        local_state.set_packages( current_job.ujid, temp )
 
         local_state.set_status( current_job.ujid, 'done' )

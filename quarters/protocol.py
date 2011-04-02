@@ -36,11 +36,7 @@ def master_state( config ):
     '''
     Download the master state file and translate the data to a structure
     '''
-    ret = None
-    try:
-        ret = get_state( config[ 'master' ], config[ 'master_port' ] )
-    except:
-        ret = None
+    ret = get_state( config[ 'master' ], config[ 'master_port' ] )
     return ret
 
 def builder_states( config ):

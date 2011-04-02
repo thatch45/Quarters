@@ -58,6 +58,10 @@ def get_url( url ):
     '''
     return urllib.request.urlopen( url ).read()
 
+def get_package_list( ip, ujid, config ):
+    remote_state = get_state( ip, config[ 'builder_port' ] )
+    return remote_state.get_packages( ujid )
+
 def get_packages( ip, ujid, config ):
     # TODO: implement when we start using https
     # need to make sure that urlretrieve overwrites

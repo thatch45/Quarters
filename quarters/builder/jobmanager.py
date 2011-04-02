@@ -64,7 +64,8 @@ def worker( worker_id, local_state, config ):
 
         job_path = os.path.join( builder_root, str(current_job.ujid) )
         pkgsrc_path = os.path.join( job_path, current_job.package_name + '.tar.gz' )
-        pkg_path = os.path.join( job_path, current_job.package_name )
+        #pkg_path = os.path.join( job_path, current_job.package_name )
+        pkg_path = os.path.join( job_path, current_job.ujid )
         chroot_path = os.path.join( chroot_base, 'worker' + str( worker_id ) )
 
         os.makedirs( job_path, exist_ok=True )

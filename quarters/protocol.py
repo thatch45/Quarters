@@ -22,7 +22,6 @@ def http_url( ip, port ):
 def get_state( ip, port ):
     ret = State()
     url = http_url( ip, port ) + '/global_status'
-    print( url )
     try:
         json_data = get_url( url )
         remote_state = json.loads( json_data.decode('utf-8' ) )

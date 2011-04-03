@@ -79,6 +79,7 @@ def worker( worker_id, local_state, config ):
         temp_tar.extractall( job_path )
 
         # chroot
+        errors = False
         for arch in current_job.architecture:
             if arch == 'i686':
                 chroot_cmd = [ 'sudo', 'extra-i686-build', '-r', config[ 'chroot_root' ] ]
@@ -95,7 +96,10 @@ def worker( worker_id, local_state, config ):
             # if failed, just ignore the rest of the code
             if return_code != 0:
                 local_state.set_status( current_job.ujid, 'failed' )
-                continue
+                errors = True
+                break
+        if errors:
+            continue
 
         # move to final destination
         getsrc = glob.glob( os.path.join( pkg_path, '*.pkg.tar.[gx]z' ) )

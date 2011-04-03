@@ -18,9 +18,7 @@ if __name__ == '__main__':
     jf = JobFetcher( local_state, config )
     jf.start()
 
-    # list of ips, ports of those ips
     sp = StatusPoller( local_state, config )
     sp.start()
 
-    # get it up!
     start_master_web( local_state, config )

@@ -18,9 +18,7 @@ if __name__ == '__main__':
     jo = JobOverlord( local_state, config )
     jo.start()
 
-    # keep master as list to reuse fetch status
     sp = StatusPoller( local_state, config )
     sp.start()
 
-    # get it up!
     start_builder_web( local_state, config )

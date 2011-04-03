@@ -34,7 +34,7 @@ returns a job from a pool and removes it from its internal list of unassigned jo
 {
  'pkgname': <name>,
  ‘sha256sum’: <srcpkgsum>,
- 'architecture': <i686,x86_64,any>
+ 'architecture': [ <i686,x86_64,any> ]
  'ujid': <some cool random num, like a shasum with padding :P>
 }
 

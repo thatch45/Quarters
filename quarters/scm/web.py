@@ -7,6 +7,7 @@ import glob
 import shutil
 from quarters.protocol import get_url
 import json
+import pacman
 
 class Web:
     def __init__( self, config, local_state ):
@@ -42,6 +43,8 @@ class Web:
             proc = subprocess.Popen( svnco_cmd, cwd='/tmp' )
             proc.wait()
             #shutil.copytree( orig_dir, dest_dir )
+            pkgbuild_path = os.path.join( '/tmp', rpkg[ 'uuid' ], 'PKGBUILD' )
+            pkgbuild_data = pacman.load( pkgbuild_path )
 
             # build the .src.tar.gz file
             proc = subprocess.Popen( makepkg_cmd, cwd=dest_dir )
@@ -66,7 +69,7 @@ class Web:
             shutil.move( getsrc[0], srcpkg_path )
 
             # add the final jobdescription to the list
-            jd = JobDescription( rpkg[ 'uuid' ], rpkg[ 'pkgname' ], sha256sum, 'x86_64' )
+            jd = JobDescription( rpkg[ 'uuid' ], rpkg[ 'pkgname' ], sha256sum, pkgbuild_data[ 'arch' ] )
             ret.append( jd )
 
         return ret

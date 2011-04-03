@@ -54,6 +54,7 @@ class JobOverlord( threading.Thread ):
 def worker( worker_id, local_state, config ):
     ''' worker where the grunt work takes place '''
     builder_root = config['builder_root']
+    worker_chroot = config[ 'chroot_root' ] + str( worker_id )
     while 1:
         current_job = local_state.get_pending_job()
 
@@ -82,10 +83,10 @@ def worker( worker_id, local_state, config ):
         errors = False
         for arch in current_job.architecture:
             if arch == 'i686':
-                chroot_cmd = [ 'sudo', 'extra-i686-build', '-r', config[ 'chroot_root' ] ]
+                chroot_cmd = [ 'sudo', 'extra-i686-build', '-r', worker_chroot ]
             else:
                 # handle x86_64 & any
-                chroot_cmd = [ 'sudo', 'extra-x86_64-build', '-r', config[ 'chroot_root' ] ]
+                chroot_cmd = [ 'sudo', 'extra-x86_64-build', '-r', worker_chroot ]
 
             with subprocess.Popen( chroot_cmd, cwd=pkg_path, stdout=subprocess.PIPE, stderr=subprocess.STDOUT ) as proc:
                 log_path = os.path.join( job_path, 'build_log' )

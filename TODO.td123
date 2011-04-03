@@ -1,4 +1,6 @@
 stuff for now
+rename pkgname to package in PROTOCOL
+need to read important things like arch from PKGBUILD, using namcap to properly determine what to do, and will be used for the next step
 add a custom repo for rebuilds
 
 stuff for later

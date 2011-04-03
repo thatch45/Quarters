@@ -80,7 +80,7 @@ def worker( worker_id, local_state, config ):
 
         # chroot
         for arch in current_job.architecture:
-            if current_job.architecture == 'i686':
+            if arch == 'i686':
                 chroot_cmd = [ 'sudo', 'extra-i686-build', '-r', config[ 'chroot_root' ] ]
             else:
                 # handle x86_64 & any

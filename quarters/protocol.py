@@ -74,8 +74,8 @@ def get_packages( ip, ujid, config ):
     root_ujid_path = os.path.join( config[ 'master_root' ], str(ujid) )
     os.makedirs( root_ujid_path, exist_ok=True )
     for pkg in pkg_list:
-        url_to_dl = baseurl + '/' + pkg[ 'pkgname' ]
-        pkg_path = os.path.join( root_ujid_path, pkg[ 'pkgname' ] )
+        url_to_dl = baseurl + '/' + pkg[ 'package' ]
+        pkg_path = os.path.join( root_ujid_path, pkg[ 'package' ] )
         urllib.request.urlretrieve( url_to_dl, pkg_path )
     
 def get_build_log( ip, ujid, config ):

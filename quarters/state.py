@@ -6,7 +6,7 @@ import multiprocessing
            status : <notdone,inprogress,done,failed>,
            packages : [
                        {
-                        pkgname : "a.pkg.tar.xz",
+                        package : "a.pkg.tar.xz",
                         sha256sum : <sha256sum>
                        },
                        ...

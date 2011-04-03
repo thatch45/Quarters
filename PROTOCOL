@@ -13,8 +13,8 @@ used to check up on progress
            status : <notdone,inprogress,done,failed>,
            packages : [
                        {
-                        pkgname : "a.pkg.tar.xz",
-                        sha256sum : <sha256sum>
+                        package : "a.pkg.tar.xz",
+                        sha256sum : "<sha256sum>"
                        },
                        ...
                       ]
@@ -48,8 +48,8 @@ used to keep track of all the jobs handed out
            status : <notdone,inprogress,done,failed,downloading,stop>,
            packages : [
                        {
-                        pkgname : "a.pkg.tar.xz",
-                        sha256sum : <sha256sum>
+                        package : "a.pkg.tar.xz",
+                        sha256sum : "<sha256sum>"
                        },
                        ...
                       ]

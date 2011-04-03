@@ -103,7 +103,7 @@ def worker( worker_id, local_state, config ):
         getsrc = glob.glob( os.path.join( job_path, '*.pkg.tar.[gx]z' ) )
         # update list of packages
         results = list( map( (lambda x: x.split('/')[-1]), getsrc ) )
-        temp = [{ 'pkgname' : i, 'sha256sum' : sha256sum_file( job_path + '/' + i ) } for i in results]
+        temp = [{ 'package' : i, 'sha256sum' : sha256sum_file( job_path + '/' + i ) } for i in results]
         local_state.set_packages( current_job.ujid, temp )
 
         local_state.set_status( current_job.ujid, 'done' )

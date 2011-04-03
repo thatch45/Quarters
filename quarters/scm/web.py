@@ -9,9 +9,10 @@ from quarters.protocol import get_url
 import json
 
 class Web:
-    def __init__( self, config ):
+    def __init__( self, config, local_state ):
         self.config = config
         self.master_root = config[ 'master_root' ]
+        self.local_state = local_state
 
     def get_jobs( self ):
         ''' returns a list of new jobdescriptions '''
@@ -51,8 +52,8 @@ class Web:
             print( 'glob returned' + str( getsrc ) )
             if len( getsrc ) != 1:
                 print( 'error, not enough, or too many srcpkgs detected in Web' )
-                # TODO change status instead of just ignoring the package
-                # also need to create a build log with a message from the scm telling what happened
+                # TODO need to create a build log with a message from the scm telling what happened
+                self.local_state.create_empty_job( rpkg[ 'uuid' ], 'failed' )
                 continue
 
             # get the sha256sum of the file

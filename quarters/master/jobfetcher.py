@@ -16,7 +16,7 @@ class JobFetcher( threading.Thread ):
         ''' iterator over all scms to fetch new jobs '''
         #ar = AURRSS( self.config )
         #svn = ArchSVN( self.config )
-        web = Web( self.config )
+        web = Web( self.config, self.local_state )
 
         while 1:
             # keep 2 jobs in the buffer

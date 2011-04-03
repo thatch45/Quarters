@@ -46,12 +46,14 @@ class State:
     def get_nowait_pending_job( self ):
         return self.pending.get_nowait()
 
-    def put_pending_job( self, job_description ):
+    def create_empty_job( self, ujid, status ):
         # create the initial structure for the empty job in the state
-        self.state[ job_description.ujid ] = {}
-        self.set_status( job_description.ujid, 'notdone' )
-        self.state[ job_description.ujid ][ 'status' ] = 'notdone'
-        self.set_packages( job_description.ujid, [] )
+        self.state[ ujid ] = {}
+        self.set_status( ujid, status )
+        self.set_packages( ujid, [] )
+
+    def put_pending_job( self, job_description ):
+        self.create_empty_job( job_description.ujid, 'notdone' )
 
         self.pending.put( job_description )
 

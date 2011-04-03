@@ -1,5 +1,5 @@
 stuff for now
-read arch from PKGBUILD and add it to the jobdescription using namcap's pacman
+add an option to the webui to choose which repo to use when building {staging,testing,extra}
 add a custom repo for rebuilds
 
 stuff for later
